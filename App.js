@@ -21,6 +21,9 @@ export default class App extends Component{
   searchtext:'',
   textEncript:'',
   textInitial:'',
+  arrayCriptoActual:[],
+  Initialabc: [ 'a', 'b', 'c', 'd', 'e', 'f', 'g','h', 'i', 'j', 'k', 'l', 'm', 'n', 'ñ','o','p','q' ,'r',
+  's','t','u','v','w','x','y','z', '0', '1','2','3','4','5','6','7','8','9']
       })
   }
 
@@ -37,8 +40,7 @@ encript(){
   const grupo2 = [];
   const grupo3 = [];
 
-  const abcInitial= [ 'a', 'b', 'c', 'd', 'e', 'f', 'g','h', 'i', 'j', 'k', 'l', 'm', 'n', 'ñ','o','p','q' ,'r',
-        's','t','u','v','w','x','y','z', '0', '1','2','3','4','5','6','7','8','9'];
+  const abcInitial= this.state.Initialabc;
   const letras= [ 'a', 'b', 'c', 'd', 'e', 'f', 'g','h', 'i', 'j', 'k', 'l', 'm', 'n', 'ñ','o','p','q' ,'r',
         's','t','u','v','w','x','y','z']
 
@@ -58,7 +60,9 @@ letras.map( (item, key) => {
    const listLetters2 =this.invert(grupo2);
    const listLetters3 = this.transp(grupo3);
    
-   this.addNumbers(listLetters1,listLetters2,listLetters3,abcInitial);
+ const criptoArray =  this.addNumbers(listLetters1,listLetters2,listLetters3,abcInitial);
+ console.warn(criptoArray);
+ return criptoArray;
 }
 
 substitution(item){
@@ -162,9 +166,9 @@ transp(grupo3){
 addNumbers(listLetters1,listLetters2,listLetters3,abcInitial){
   const {searchtext} = this.state;
   const arrayFinalCrypto=[];
+  let cripto=[];
   const numberList=[9,7,5,3,1,8,6,4,2,0];
   const objectLettersChangue={};
-  const objectLettersInitial={};
   listLetters1.map((items, key) => {
     arrayFinalCrypto.push(items);
   })
@@ -180,42 +184,34 @@ addNumbers(listLetters1,listLetters2,listLetters3,abcInitial){
     arrayFinalCrypto.splice(orderLetter + key + 1 , 0, item );
   })
 
-
-
   const textoEncriptColumns = [];
-  
-
   searchtext.split(' ').map((item, key)=> {
-    
-/*     if( t < (newnumber[indice]%newitem.length)){
-      t =  t -  newitem.length +  (newnumber[indice]%newitem.length);
-    }
-    else {
-      t= t - (newnumber[indice]%newitem.length);
-    }  
-    
-    if( t < (newnumber[indice]%newitem.length)){
-      t =  t -  newitem.length +  (newnumber[indice]%newitem.length);
-    }
-    else {
-      t= t - (newnumber[indice]%newitem.length);
-    }   */
-    let indicatorElement=0;
-    while( indicatorElement < arrayFinalCrypto.length   ){
-      console.warn('hi');
-      
+    const cript= arrayFinalCrypto;
+    let letra;
+    let a;
+    letra = cript[0];
+   if (key>0){
+      let indicatorElement=0;
+       while( indicatorElement < arrayFinalCrypto.length   ){
+        if(indicatorElement === arrayFinalCrypto.length-1)
+        {
+       cript[0]=letra;
+        }
+        else{
+          a = cript[indicatorElement +1];
+          cript[indicatorElement +1] = letra ;
+          letra = a; 
+         
+        }
+        indicatorElement=indicatorElement+1; 
 
-    }
+      } 
+    } 
 
+  cript.map( (item, key)=> {
+  objectLettersChangue[abcInitial[key]]= item;
+})
 
-    arrayFinalCrypto.map( (item, key)=> {
-      objectLettersChangue[abcInitial[key]]= item;
-    })
-  
-    abcInitial.map( (item, key)=> {
-      objectLettersInitial[arrayFinalCrypto[key]]= item;
-  
-    })
 
     let n=0;
     const textoEncript = []; 
@@ -227,31 +223,109 @@ addNumbers(listLetters1,listLetters2,listLetters3,abcInitial){
      textoEncript.push(' ');
 
      textoEncriptColumns.push(textoEncript.join('') )
+     this.setState({textEncript:textoEncriptColumns.join(''),arrayCriptoActual:cript  });
+      cripto=cript;
 
   })
-/*    while( t < searchtext.split(' ').length){
-    console.warn('hi')
-    t=t+1
-  }  */
-/*   while (n< searchtext.length  ){
-   const Text= objectLettersChangue[searchtext[n]];
-   textoEncript.push(Text);
-    n=n+1
-  }  */
-  console.warn('texto',textoEncriptColumns.join(''));
-/*   console.warn('objectLettersChangue',objectLettersChangue);
-  console.warn('objectLettersInitial',objectLettersInitial); */
-
+  return cripto;
 }
 
+decode(){
+  const arrayCriptoActual = this.encript();
+  const {searchtext, Initialabc} = this.state;
+  const objectLettersInitial={};
+  const textotextoDecodeColumns=[];
+  const textReverse= Array.from(searchtext) // searchtext.split("").reverse().join("");
+  const array=[];
+  const words=[];
+  searchtext.split(' ').map((item, key)=> {
+    words.push(item);
+  });
+// funcion para las columnas convertirlas a a texto
+  let indice=0;
+  let indiceWord=0;
+  let colum=[];
+ textReverse.map( (item, key) => {
+
+
+  if (item ===" "){
+    array.push(colum.join('') )
+    colum=[];
+    array.push(item);
+    indice=indice+1;
+  }
+  else {
+    colum.push(item);
+    if(key === textReverse.length-1  ){
+      array.push(colum.join('') )
+    }
+  }
+ });
+ const arraylistReverse= array.reverse();
+ console.warn(arraylistReverse.join(''));
+
+
+
+/*   console.warn(array);
+  console.warn(words); */
+
+  arraylistReverse.join('').split(' ').map((item, key)=> {
+
+        const cript= arrayCriptoActual;
+        let letra;
+        let a;
+        let ultpos = arrayCriptoActual.length -1
+        letra = cript[ultpos];
+       if (key>0){
+          let indicatorElement=0;
+           
+           while( indicatorElement < arrayCriptoActual.length   ){
+            if(indicatorElement === ultpos)
+            {
+           cript[indicatorElement]=letra;
+            }
+            else{
+              a = cript[ultpos - indicatorElement -1];
+              cript[ultpos - indicatorElement -1] = letra ;
+              letra = a; 
+             
+            }
+            indicatorElement=indicatorElement+1; 
+    
+          } 
+        } 
+    
+
+    
+        Initialabc.map( (item, key)=> {
+      objectLettersInitial[cript[key]]= item;
+    
+    }) 
+        let n=0;
+        const textoDecode = []; 
+        while (n < item.length  ){
+          const Text= objectLettersInitial[item[n]];
+          textoDecode.push(Text);
+           n=n+1
+         }
+         textoDecode.push(' ');
+    
+         textotextoDecodeColumns.push(textoDecode.join('') )
+         this.setState({textInitial:textotextoDecodeColumns.join('') });
+         //console.warn(textotextoDecodeColumns.join(''));
+
+      }) 
+
+
+}
   render() {
     // ...
- const {Textenc} = this.state;
+ const {Textenc, textEncript, arrayCriptoActual, textInitial} = this.state;
     return (
      <View>
        <Text>Encríptamelo</Text>
-       <Text>Hola mundo</Text>
-       <TextInput       placeholder="placeholder"
+       <Text>{textEncript}</Text>
+       <TextInput       placeholder="Escriba el texto aquì"
                         value={this.state.searchtext}
                         onChangeText={searchtext =>
                             this.setState({ searchtext })
@@ -260,10 +334,13 @@ addNumbers(listLetters1,listLetters2,listLetters3,abcInitial){
                             this.textInput = input;
                         }}
                         returnKeyType="go" />
-       <Text>{Textenc}</Text>
-       <Text>{Textenc}</Text>
+       <Text>{textInitial}</Text>
+       <Text>{arrayCriptoActual}</Text>
         <TouchableOpacity onPress={() => this.encript()} >
          <Text style = {{backgroundColor:'red'}}>Encriptar</Text>
+       </TouchableOpacity>
+       <TouchableOpacity onPress={() => this.decode()} >
+         <Text style = {{backgroundColor:'red'}}>Desciffrar</Text>
        </TouchableOpacity>
      </View>
     );
