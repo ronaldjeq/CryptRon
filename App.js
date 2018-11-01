@@ -21,6 +21,7 @@ export default class App extends Component{
   searchtext:'',
   textEncript:'',
   textInitial:'',
+  textsee:'',
   arrayCriptoActual:[],
   Initialabc: [ 'a', 'b', 'c', 'd', 'e', 'f', 'g','h', 'i', 'j', 'k', 'l', 'm', 'n', 'ñ','o','p','q' ,'r',
   's','t','u','v','w','x','y','z', '0', '1','2','3','4','5','6','7','8','9']
@@ -44,6 +45,7 @@ encript(){
   const letras= [ 'a', 'b', 'c', 'd', 'e', 'f', 'g','h', 'i', 'j', 'k', 'l', 'm', 'n', 'ñ','o','p','q' ,'r',
         's','t','u','v','w','x','y','z']
 
+//Asing letters into arraysgroups
 letras.map( (item, key) => {
 
     if(key<6){
@@ -61,8 +63,8 @@ letras.map( (item, key) => {
    const listLetters3 = this.transp(grupo3);
    
  const criptoArray =  this.addNumbers(listLetters1,listLetters2,listLetters3,abcInitial);
- console.warn(criptoArray);
- return criptoArray;
+ const encodeDinamic= this.encode(criptoArray, abcInitial);
+ return encodeDinamic;
 }
 
 substitution(item){
@@ -163,12 +165,10 @@ transp(grupo3){
   return letters;
 }
 
-addNumbers(listLetters1,listLetters2,listLetters3,abcInitial){
-  const {searchtext} = this.state;
+addNumbers(listLetters1,listLetters2,listLetters3){
   const arrayFinalCrypto=[];
-  let cripto=[];
   const numberList=[9,7,5,3,1,8,6,4,2,0];
-  const objectLettersChangue={};
+
   listLetters1.map((items, key) => {
     arrayFinalCrypto.push(items);
   })
@@ -178,21 +178,35 @@ addNumbers(listLetters1,listLetters2,listLetters3,abcInitial){
   listLetters3.map((items, key) => {
     arrayFinalCrypto.push(items);
   })
-  const orderLetter = arrayFinalCrypto.indexOf("l");
 
+
+  const orderLetter = arrayFinalCrypto.indexOf("l");
+  // added numbers after letter L
   numberList.map( (item, key)=> {
     arrayFinalCrypto.splice(orderLetter + key + 1 , 0, item );
   })
 
+
+  return arrayFinalCrypto;
+}
+
+encode(arrayFinalCrypto, abcInitial){
+  let cripto=[];
+  const objectLettersChangue={};
+  const {searchtext} = this.state;
   const textoEncriptColumns = [];
+
+  //Initializate function to changue array for each blank 
   searchtext.split(' ').map((item, key)=> {
     const cript= arrayFinalCrypto;
     let letra;
     let a;
     letra = cript[0];
-   if (key>0){
+   if (key>0){ //modified array when exist blank space
       let indicatorElement=0;
        while( indicatorElement < arrayFinalCrypto.length   ){
+
+        //the letters changue 1 possition right
         if(indicatorElement === arrayFinalCrypto.length-1)
         {
        cript[0]=letra;
@@ -207,12 +221,13 @@ addNumbers(listLetters1,listLetters2,listLetters3,abcInitial){
 
       } 
     } 
-
+  
+  //added object for abc and abc encript,
   cript.map( (item, key)=> {
   objectLettersChangue[abcInitial[key]]= item;
 })
 
-
+  //pusshed text encript into new array
     let n=0;
     const textoEncript = []; 
     while (n < item.length  ){
@@ -221,110 +236,124 @@ addNumbers(listLetters1,listLetters2,listLetters3,abcInitial){
        n=n+1
      }
      textoEncript.push(' ');
-
+     //added text encript with blank spaces
      textoEncriptColumns.push(textoEncript.join('') )
-     this.setState({textEncript:textoEncriptColumns.join(''),arrayCriptoActual:cript  });
+      //changue states
+     this.setState({textEncript:textoEncriptColumns.join(''),textsee:textoEncriptColumns.join(''),arrayCriptoActual:cript  });
       cripto=cript;
 
   })
-  return cripto;
+  return cripto
 }
+
 
 decode(){
   const arrayCriptoActual = this.encript();
   const {searchtext, Initialabc} = this.state;
-  const objectLettersInitial={};
-  const textotextoDecodeColumns=[];
-  const textReverse= Array.from(searchtext) // searchtext.split("").reverse().join("");
-  const array=[];
+
   const words=[];
-  searchtext.split(' ').map((item, key)=> {
+  searchtext.split(' ').map((item, key)=> { //separate balnk spaces into array and push into new item array
     words.push(item);
   });
-// funcion para las columnas convertirlas a a texto
+
+  const arraylistReverse= this.invertTextSearch()
+  const textotextoDecodeColumns= this.decodeTextInitialabc(arrayCriptoActual,Initialabc,arraylistReverse)
+  
+  
+  this.setState({textInitial:textotextoDecodeColumns.reverse().join('') });
+}
+
+
+// function to convert colums to interting text
+invertTextSearch(){
+  const {searchtext} = this.state;
+
+  const array=[];
+
+  const textReverse= Array.from(searchtext) // convert searchtext to array
+
   let indice=0;
   let indiceWord=0;
   let colum=[];
- textReverse.map( (item, key) => {
+  textReverse.map( (item, key) => {
 
 
-  if (item ===" "){
-    array.push(colum.join('') )
-    colum=[];
-    array.push(item);
-    indice=indice+1;
-  }
-  else {
-    colum.push(item);
-    if(key === textReverse.length-1  ){
+    if (item ===" "){
       array.push(colum.join('') )
+      colum=[];
+      array.push(item);
+      indice=indice+1;
     }
-  }
- });
- const arraylistReverse= array.reverse();
- console.warn(arraylistReverse.join(''));
+    else {
+      colum.push(item);
+      if(key === textReverse.length-1  ){
+        array.push(colum.join('') )
+      }
+    }
+   });
+   const arraylistReverse= array.reverse();
+   return arraylistReverse;
+} 
 
-
-
-/*   console.warn(array);
-  console.warn(words); */
-
+decodeTextInitialabc(arrayCriptoActual,Initialabc,arraylistReverse){
+  const objectLettersInitial={};
+  const textotextoDecodeColumns=[];
   arraylistReverse.join('').split(' ').map((item, key)=> {
 
-        const cript= arrayCriptoActual;
-        let letra;
-        let a;
-        let ultpos = arrayCriptoActual.length -1
-        letra = cript[ultpos];
-       if (key>0){
-          let indicatorElement=0;
-           
-           while( indicatorElement < arrayCriptoActual.length   ){
-            if(indicatorElement === ultpos)
-            {
-           cript[indicatorElement]=letra;
-            }
-            else{
-              a = cript[ultpos - indicatorElement -1];
-              cript[ultpos - indicatorElement -1] = letra ;
-              letra = a; 
-             
-            }
-            indicatorElement=indicatorElement+1; 
-    
-          } 
-        } 
-    
+    const cript= arrayCriptoActual;
+    let letra;
+    let a;
+    let ultpos = arrayCriptoActual.length -1
+    letra = cript[ultpos];
+   if (key>0){
+      let indicatorElement=0;
+       //modified cript array for each blank espaces
+       while( indicatorElement < arrayCriptoActual.length   ){
+        if(indicatorElement === ultpos)
+        {
+       cript[indicatorElement]=letra;
+        }
+        else{
+          a = cript[ultpos - indicatorElement -1];
+          cript[ultpos - indicatorElement -1] = letra ;
+          letra = a; 
+         
+        }
+        indicatorElement=indicatorElement+1; 
 
-    
-        Initialabc.map( (item, key)=> {
-      objectLettersInitial[cript[key]]= item;
-    
-    }) 
-        let n=0;
-        const textoDecode = []; 
-        while (n < item.length  ){
-          const Text= objectLettersInitial[item[n]];
-          textoDecode.push(Text);
-           n=n+1
-         }
-         textoDecode.push(' ');
-    
-         textotextoDecodeColumns.push(textoDecode.join('') )
-         this.setState({textInitial:textotextoDecodeColumns.join('') });
-         //console.warn(textotextoDecodeColumns.join(''));
-
-      }) 
+      } 
+    } 
 
 
+
+    Initialabc.map( (item, key)=> {
+  objectLettersInitial[cript[key]]= item;
+
+}) 
+    let n=0;
+    const textoDecode = []; 
+    while (n < item.length  ){
+      const Text= objectLettersInitial[item[n]];
+      textoDecode.push(Text);
+       n=n+1
+     }
+     textoDecode.push(' ');
+     textotextoDecodeColumns.push(textoDecode.join('') )
+     this.setState({textInitial:textotextoDecodeColumns.join('') });
+     //console.warn(textotextoDecodeColumns.join(''));
+
+  }) 
+  return textotextoDecodeColumns;
 }
-  render() {
+
+
+render() {
     // ...
- const {Textenc, textEncript, arrayCriptoActual, textInitial} = this.state;
+ const {textsee, textEncript, arrayCriptoActual, textInitial} = this.state;
     return (
      <View>
        <Text>Encríptamelo</Text>
-       <Text>{textEncript}</Text>
+       <Text>{textsee}</Text>
        <TextInput       placeholder="Escriba el texto aquì"
                         value={this.state.searchtext}
                         onChangeText={searchtext =>
