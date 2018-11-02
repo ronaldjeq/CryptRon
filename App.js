@@ -151,11 +151,10 @@ substitution(item){
       nnumber=0;
     }
 
-    newnumber.push(number[nnumber]);
-    newkeyp.push(keyp[nkey]);
+    
 
-    nnumber=nnumber+1;
-    nkey=nkey+1;
+
+    
   })
   while (indice < newnumber.length){
     console.warn(indice,newnumber[indice], newkeyp[indice], newitem, t);
