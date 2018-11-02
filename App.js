@@ -5,23 +5,69 @@
  */
 
 import React, { Component } from 'react';
-import { StyleSheet,  Text, View, TouchableOpacity, TextInput } from 'react-native';
+import { Picker,  Text, View, TouchableOpacity, TextInput, Image,ScrollView } from 'react-native';
 //import AppButton from './aplication/Components/AppButton';
 import BackgroundImage from './aplication/Components/BackgroundImage';
 import Orientation from 'react-native-orientation';
+
+const style = {
+  container:{
+    backgroundColor:'#E6E6FA',
+    height:'100%',
+    width:'100%'
+  },
+  Image:{
+    marginTop:-30,
+    height:300,
+    width: 420,
+  },
+  tittle:{
+    marginTop:-10,
+    color:'#0000FF',
+    fontSize:30,
+    textAlign:'center',
+  },
+  textencript:{
+    flex:1,
+    backgroundColor:'#2EFE2E',
+    fontSize:15,
+    fontWeight:'bold',
+  },
+
+  textInitial:{
+    flex:1,
+    backgroundColor:'red',
+    fontSize:15,
+    fontWeight:'bold',
+  },
+  button:{
+    backgroundColor:'#8181F7',
+    width:100,
+    height:30,
+    borderRadius:20,
+    justifyContent:'center',
+    alignItems:'center',
+    marginVertical:20,
+    marginHorizontal:150,
+  },
+
+  textButton:{
+    fontSize:15,
+    fontWeight:'bold',
+  }
+
+
+}
 export default class App extends Component{
 
 
   componentWillMount() {
-    // The getOrientation method is async. It happens sometimes that
-    // you need the orientation at the moment the JS runtime starts running on device.
-    // `getInitialOrientation` returns directly because its a constant set at the
-    // beginning of the JS runtime.
  this.setState({ 
   searchtext:'',
   textEncript:'',
   textInitial:'',
   textsee:'',
+  activeText:false,
   arrayCriptoActual:[],
   Initialabc: [ 'a', 'b', 'c', 'd', 'e', 'f', 'g','h', 'i', 'j', 'k', 'l', 'm', 'n', 'ñ','o','p','q' ,'r',
   's','t','u','v','w','x','y','z', '0', '1','2','3','4','5','6','7','8','9']
@@ -239,7 +285,7 @@ encode(arrayFinalCrypto, abcInitial){
      //added text encript with blank spaces
      textoEncriptColumns.push(textoEncript.join('') )
       //changue states
-     this.setState({textEncript:textoEncriptColumns.join(''),textsee:textoEncriptColumns.join(''),arrayCriptoActual:cript  });
+     this.setState({textEncript:textoEncriptColumns.join(''),textsee:textoEncriptColumns.join(''),arrayCriptoActual:cript,activeText:true,  });
       cripto=cript;
 
   })
@@ -260,7 +306,7 @@ decode(){
   const textotextoDecodeColumns= this.decodeTextInitialabc(arrayCriptoActual,Initialabc,arraylistReverse)
   
   
-  this.setState({textInitial:textotextoDecodeColumns.reverse().join('') });
+  this.setState({textsee:textotextoDecodeColumns.reverse().join('') });
 }
 
 
@@ -349,11 +395,14 @@ decodeTextInitialabc(arrayCriptoActual,Initialabc,arraylistReverse){
 
 render() {
     // ...
- const {textsee, textEncript, arrayCriptoActual, textInitial} = this.state;
+ const {textsee, activeText} = this.state;
     return (
-     <View>
-       <Text>Encríptamelo</Text>
-       <Text>{textsee}</Text>
+     <ScrollView style={style.container}>
+       <Image 
+       style={style.Image}
+       resizeMode='contain'
+       source={require('./images/Encriptación.jpg')} ></Image>
+       <Text style={style.tittle}>Encríptamelo</Text>
        <TextInput       placeholder="Escriba el texto aquì"
                         value={this.state.searchtext}
                         onChangeText={searchtext =>
@@ -363,15 +412,22 @@ render() {
                             this.textInput = input;
                         }}
                         returnKeyType="go" />
-       <Text>{textInitial}</Text>
-       <Text>{arrayCriptoActual}</Text>
-        <TouchableOpacity onPress={() => this.encript()} >
-         <Text style = {{backgroundColor:'red'}}>Encriptar</Text>
+        <TouchableOpacity style={style.button} onPress={() => this.encript()} >
+         <Text style={style.textButton} >Encriptar</Text>
        </TouchableOpacity>
-       <TouchableOpacity onPress={() => this.decode()} >
-         <Text style = {{backgroundColor:'red'}}>Desciffrar</Text>
+       <TouchableOpacity style={style.button} onPress={() => this.decode()} >
+         <Text style={style.textButton} >Desciffrar</Text>
        </TouchableOpacity>
-     </View>
+
+       {
+         activeText&&
+        <Text selectable style={style.textencript}>{textsee}</Text>
+
+       }
+
+
+
+     </ScrollView>
     );
   }
 }
