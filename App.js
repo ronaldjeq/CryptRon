@@ -5,10 +5,9 @@
  */
 
 import React, { Component } from 'react';
-import { Picker,  Text, View, TouchableOpacity, TextInput, Image,ScrollView } from 'react-native';
+import { Dimensions,  Text, View, TouchableOpacity, TextInput, Image,ScrollView } from 'react-native';
+import AppButton from './aplication/Components/AppButton';
 //import AppButton from './aplication/Components/AppButton';
-import BackgroundImage from './aplication/Components/BackgroundImage';
-import Orientation from 'react-native-orientation';
 
 const style = {
   container:{
@@ -47,13 +46,21 @@ const style = {
     borderRadius:20,
     justifyContent:'center',
     alignItems:'center',
-    marginVertical:20,
+    marginVertical:10,
     marginHorizontal:150,
   },
 
   textButton:{
     fontSize:15,
     fontWeight:'bold',
+  },
+
+  contentchangeNumber:{
+    flexDirection:'row',
+    alignItems:'center',
+    //justifyContent:'center',
+
+
   }
 
 
@@ -69,6 +76,10 @@ export default class App extends Component{
   textsee:'',
   activeText:false,
   arrayCriptoActual:[],
+  number1:9,
+  number2:9,
+  number3:9,
+  changue:false,
   Initialabc: [ 'a', 'b', 'c', 'd', 'e', 'f', 'g','h', 'i', 'j', 'k', 'l', 'm', 'n', 'ñ','o','p','q' ,'r',
   's','t','u','v','w','x','y','z', '0', '1','2','3','4','5','6','7','8','9']
       })
@@ -81,6 +92,14 @@ componentDidMount(){
         })
 }
   
+componentDidUpdate( prevState ) {
+  if (  this.state.changue ===true ) {
+      const numberRest= 27- this.state.number1- this.state.number2;
+      this.setState({number3:numberRest,changue:false });
+
+      // return response
+  }
+}
 
 encript(){
   const grupo1 = [];
@@ -90,14 +109,14 @@ encript(){
   const abcInitial= this.state.Initialabc;
   const letras= [ 'a', 'b', 'c', 'd', 'e', 'f', 'g','h', 'i', 'j', 'k', 'l', 'm', 'n', 'ñ','o','p','q' ,'r',
         's','t','u','v','w','x','y','z']
-
+const {number1, number2}= this.state;
 //Asing letters into arraysgroups
 letras.map( (item, key) => {
 
-    if(key<6){
+    if(key<number1){
      grupo1.push(item);
    }
-   else if(key<19){
+   else if(key<number2+number1){
     grupo2.push(item);
   }
   else {
@@ -139,6 +158,7 @@ substitution(item){
     nkey=nkey+1;
   })
   while (indice < newnumber.length){
+    console.warn(indice,newnumber[indice], newkeyp[indice], newitem, t);
     if(newitem.length === 1){
       t=0;
     }
@@ -392,10 +412,45 @@ decodeTextInitialabc(arrayCriptoActual,Initialabc,arraylistReverse){
   return textotextoDecodeColumns;
 }
 
+decreaseNumber(colum, number){
+  if(colum !==3 ){
+    if(number>6){
+      number=number-1;
+      if(colum===1){
+        this.setState({number1:number, changue:true});
+      }
+      else{
+        this.setState({number2:number, changue:true});
+      }
+
+    }
+
+
+  }
+}
+findRestNumber(){
+
+}
+incrementNumber(colum, number){
+  if(colum !==3 ){
+    if(number<13){
+      number=number+1;
+      if(colum===1){
+        this.setState({number1:number, changue:true});
+      }
+      else{
+        this.setState({number2:number, changue:true});
+      }
+
+    }
+
+
+  }
+}
 
 render() {
     // ...
- const {textsee, activeText} = this.state;
+ const {textsee, activeText, number1, number2, number3} = this.state;
     return (
      <ScrollView style={style.container}>
        <Image 
@@ -412,13 +467,18 @@ render() {
                             this.textInput = input;
                         }}
                         returnKeyType="go" />
+       <View style={style.contentchangeNumber}>
+       <AppButton colum={1} number={number1} onPress={()=> this.incrementNumber(1, number1)} onPress2={()=> this.decreaseNumber(1, number1)} ></AppButton>
+       <AppButton colum={2} number={number2} onPress={()=> this.incrementNumber(2, number2)} onPress2={()=> this.decreaseNumber(2, number2)} ></AppButton>
+       <AppButton colum={3} number={number3} onPress={()=> this.incrementNumber(3, number3)} onPress2={()=> this.decreaseNumber(3, number3)} ></AppButton>
+       </View>
+
         <TouchableOpacity style={style.button} onPress={() => this.encript()} >
          <Text style={style.textButton} >Encriptar</Text>
        </TouchableOpacity>
        <TouchableOpacity style={style.button} onPress={() => this.decode()} >
          <Text style={style.textButton} >Desciffrar</Text>
        </TouchableOpacity>
-
        {
          activeText&&
         <Text selectable style={style.textencript}>{textsee}</Text>

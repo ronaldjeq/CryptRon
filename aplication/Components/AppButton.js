@@ -1,38 +1,57 @@
 import React, { Component } from 'react';
 import { Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {Dimensions} from 'react-native';
-import { bgcyan } from 'ansi-colors';
+import {Dimensions, View, Text, TouchableOpacity} from 'react-native';
+const DEVICE_WIDTH = Dimensions.get( "window" ).width;
+
+const style = {
+    container:{
+        justifyContent:'center',
+        alignItems: "center",
+        width: DEVICE_WIDTH/3,
+    },
+
+    containerNumber:{
+        marginTop:10,
+        flexDirection:'row',
+        justifyContent:'center',
+        alignItems: "center",
+        height:30,
+    },
+
+    containerButtons:{
+        justifyContent:'center',
+        alignItems: "center",
+        backgroundColor:'#00FF7F',
+        height:'100%',
+    },
+    Button:{
+        height:'50%',
+        alignItems: "center",
+    }
+
+}
 
 export  default class AppButton extends Component {
     render(){
-        const {action, iconName, iconColor, title, bgColor} = this.props;
-        const {width} = Dimensions.get('window');
+         const {colum, number, onPress, onPress2} = this.props;
+        // const {width} = Dimensions.get('window');
         return (
-            <Button
-            onPress={action}
-            buttonStyle={{
-                backgroundColor: bgColor,
-                height: 45,
-                borderColor: "transparent",
-                borderWidth: 0,
-                borderRadius: 5,
-                marginBottom: 5,
-                width: width
+            <View style={style.container}>
+                <Text>Columna {colum} </Text>
+                <View style={style.containerNumber}>
+                    <Text>{number}</Text>
+                    <View style={style.containerButtons}>
+                        <TouchableOpacity style={style.Button} onPress={onPress} >
+                            <Text>+</Text>  
+                        </TouchableOpacity>
+                        <TouchableOpacity style={style.Button} onPress={onPress2}>
+                            <Text>-</Text>  
+                        </TouchableOpacity>
+                    </View>
+                </View>
 
-            }}
-            title ={title}
-            icon={
-                <Icon
-                    name={iconName}
-                    size={15}
-                    color={iconColor}
-                    />
-            }
-            text={title}
-            iconRight={true}
-            >
-            </Button>
+            </View>
         );
     }
 }
