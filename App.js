@@ -142,7 +142,7 @@ substitution(item){
   const newkeyp=[];
   let indice=0;
   const cript= [];
-  let t;
+  let t; //podsition actual
   item.map( (letter, key) => {
     if( nkey > keyp.length-1){
       nkey=0;
@@ -150,47 +150,81 @@ substitution(item){
     if( nnumber > number.length-1){
       nnumber=0;
     }
+    newnumber.push(number[nnumber]);
+    newkeyp.push(keyp[nkey]);
 
-    
-
-
-    
+    nnumber= nnumber+1;
+    nkey= nkey+1;
   })
   while (indice < newnumber.length){
-    console.warn(indice,newnumber[indice], newkeyp[indice], newitem, t);
+
     if(newitem.length === 1){
       t=0;
+     //  console.warn(t, 'final');
+
     }
     else {
-      if(indice ===0) {
-
+      if( indice===0 /*||  (t ===0 && newitem.length !== 1 )*/) {
+       //  console.warn(t, 'entra');
         t = newnumber[indice]%newitem.length;
         }
       else {
           if( newkeyp[indice]==='i'){
+
               if( t < (newnumber[indice]%newitem.length)){
-                t =  t -  newitem.length +  (newnumber[indice]%newitem.length);
+               //  console.warn(t, 'entra1',indice);
+                t = t+  Math.abs(newitem.length-(newnumber[indice]%newitem.length));  
+                // console.warn(t, 'final1',newitem[t]);
+
               }
               else {
+              //   console.warn(t, 'entra2',indice);
+
                 t= t - (newnumber[indice]%newitem.length);
+              //   console.warn(t, 'final2',newitem[t]);
+
               }       
           }
           else {
-            if ((newnumber[indice]%(newitem.length+1)) + t > newitem.length ){
-              t =  t + (newnumber[indice]%(newitem.length+1)) - (newitem.length) -1 ;
+ 
+              if ((newnumber[indice]%(newitem.length+1)) + t > newitem.length || (t === newitem.length) ){
+                // console.warn(t, 'entra3',indice);
+                if(((newnumber[indice])%newitem.length)===0){
+                  t= t-1;
+                }
+                else{
+                  t =  t + (newnumber[indice]%(newitem.length)) - (newitem.length) -1 ;
+
+                }
+                 //console.warn(t, 'final3',newitem[t]);
+   
             }
             else {
-              t= t + (newnumber[indice]%newitem.length);
+               //  console.warn(t, 'entra4',indice);
+               if(((newnumber[indice])%newitem.length)===0){
+                t= newnumber[indice]-1;
+              }
+              else{
+                t= t + ((newnumber[indice])%newitem.length) -1;
+
             }
+   
                }
+               // console.warn(t, 'final4',newitem[t]);
+   
           }
 
     }
+          }
+
+    
 
     cript.push(newitem[t]);
     newitem.splice(newitem.indexOf(newitem[t]), 1);
     indice=indice+1;
+
   }
+
   return(cript);
 }
 
