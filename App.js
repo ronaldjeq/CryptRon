@@ -296,7 +296,7 @@ encode(arrayFinalCrypto, abcInitial){
   const textoEncriptColumns = [];
 
   //Initializate function to changue array for each blank 
-  searchtext.split(' ').map((item, key)=> {
+  searchtext.replace(/%/g, " ").split(' ').map((item, key)=> {
     const cript= arrayFinalCrypto;
     let letra;
     let a;
@@ -334,7 +334,7 @@ encode(arrayFinalCrypto, abcInitial){
       textoEncript.push(Text);
        n=n+1
      }
-     textoEncript.push(' ');
+     textoEncript.push('%');
      //added text encript with blank spaces
      textoEncriptColumns.push(textoEncript.join('') )
       //changue states
@@ -342,6 +342,7 @@ encode(arrayFinalCrypto, abcInitial){
       cripto=cript;
 
   })
+  console.warn(cripto);
   return cripto
 }
 
@@ -351,21 +352,23 @@ decode(){
   const {searchtext, Initialabc} = this.state;
 
   const words=[];
-  searchtext.split(' ').map((item, key)=> { //separate balnk spaces into array and push into new item array
+  searchtext.replace(/%/g, " ").split(' ').map((item, key)=> { //separate balnk spaces into array and push into new item array
     words.push(item);
   });
 
-  const arraylistReverse= this.invertTextSearch()
+  const arraylistReverse= this.invertTextSearch(searchtext.replace(/%/g, " "))
   const textotextoDecodeColumns= this.decodeTextInitialabc(arrayCriptoActual,Initialabc,arraylistReverse)
-  
+  console.warn(arraylistReverse);
+  console.warn(searchtext.replace(/%/g, " "));
+  console.warn(textotextoDecodeColumns);
+
   
   this.setState({textsee:textotextoDecodeColumns.reverse().join('') });
 }
 
 
 // function to convert colums to interting text
-invertTextSearch(){
-  const {searchtext} = this.state;
+invertTextSearch(searchtext){
 
   const array=[];
 
