@@ -71,6 +71,7 @@ export default class App extends Component{
   componentWillMount() {
  this.setState({ 
   searchtext:'',
+  secretWord:'',
   textEncript:'',
   textInitial:'',
   textsee:'',
@@ -265,6 +266,7 @@ transp(grupo3){
 }
 
 addNumbers(listLetters1,listLetters2,listLetters3){
+  const {secretWord} = this.state;
   const arrayFinalCrypto=[];
   const numberList=[9,7,5,3,1,8,6,4,2,0];
 
@@ -278,15 +280,95 @@ addNumbers(listLetters1,listLetters2,listLetters3){
     arrayFinalCrypto.push(items);
   })
 
+ 
 
-  const orderLetter = arrayFinalCrypto.indexOf("l");
+  //function for changue wletters with secretWord
+
+
+const letterTransform = this.newArrayLetters(arrayFinalCrypto, secretWord);
+
+
+
+
+  const orderLetter = letterTransform.indexOf("l");
   // added numbers after letter L
   numberList.map( (item, key)=> {
-    arrayFinalCrypto.splice(orderLetter + key + 1 , 0, item );
+    letterTransform.splice(orderLetter + key + 1 , 0, item );
   })
 
+  
 
-  return arrayFinalCrypto;
+
+
+  return letterTransform;
+}
+
+// method using secret Word
+newArrayLetters(arrayFinalCrypto, secretWord){
+
+  const secretArray= [];
+  let indicator=0;
+  let indicatorNumber=0;
+  while (indicator < secretWord.length){
+    if (!secretArray.includes(secretWord[indicator])){
+      secretArray.push(secretWord[indicator]);
+    }
+
+    indicator=indicator+1;
+  }
+
+  secretArray.map(item => {
+    if (arrayFinalCrypto.includes(item)){
+      
+      arrayFinalCrypto.splice(arrayFinalCrypto.indexOf(item),1);
+  }})
+
+  const repetition= 27%secretArray.length >0? Math.trunc(27/secretArray.length )+1:Math.trunc(27/secretArray.length ) ;
+  let t=0;
+  const arraytemporal=[];
+
+  while(indicatorNumber<repetition){
+    let i=0;
+    if(indicatorNumber===0){
+     arraytemporal.push(secretArray);
+
+    }
+    else{
+       FinalArray=[];
+
+      for (i = 0; i < secretArray.length; i++) { 
+          FinalArray.push(arrayFinalCrypto[t])
+          t=t+1;
+
+        }  
+        arraytemporal.push(FinalArray.filter(Boolean));
+
+      }
+
+      indicatorNumber=indicatorNumber+1;
+    }
+
+    //arraytemporal[repetition-1].filter(Boolean);
+    const newListLetters = this.orderLetter(arraytemporal);
+
+  return newListLetters;
+
+
+}
+orderLetter(arraytemporal){
+ // console.warn(arraytemporal);
+  const arrayLetters=[];
+  arraytemporal.map((items, key) => {
+    //console.warn(items, key);
+    arraytemporal.map((letter, indice) => {
+        if(arraytemporal[indice][key]!==null){
+          arrayLetters.push(arraytemporal[indice][key]);
+        }
+      })
+
+  })
+  return arrayLetters.filter(Boolean);
+
 }
 
 encode(arrayFinalCrypto, abcInitial){
@@ -342,7 +424,6 @@ encode(arrayFinalCrypto, abcInitial){
       cripto=cript;
 
   })
-  console.warn(cripto);
   return cripto
 }
 
@@ -358,9 +439,6 @@ decode(){
 
   const arraylistReverse= this.invertTextSearch(searchtext.replace(/%/g, " "))
   const textotextoDecodeColumns= this.decodeTextInitialabc(arrayCriptoActual,Initialabc,arraylistReverse)
-  console.warn(arraylistReverse);
-  console.warn(searchtext.replace(/%/g, " "));
-  console.warn(textotextoDecodeColumns);
 
   
   this.setState({textsee:textotextoDecodeColumns.reverse().join('') });
@@ -508,7 +586,15 @@ render() {
        <AppButton colum={2} number={number2} onPress={()=> this.incrementNumber(2, number2)} onPress2={()=> this.decreaseNumber(2, number2)} ></AppButton>
        <AppButton colum={3} number={number3} onPress={()=> this.incrementNumber(3, number3)} onPress2={()=> this.decreaseNumber(3, number3)} ></AppButton>
        </View>
-
+       <TextInput       placeholder="Escriba la palabra secreta"
+                        value={this.state.secretWord}
+                        onChangeText={secretWord =>
+                            this.setState({ secretWord })
+                        }
+                        ref={input => {
+                            this.textInput = input;
+                        }}
+                        returnKeyType="go" /> 
         <TouchableOpacity style={style.button} onPress={() => this.encript()} >
          <Text style={style.textButton} >Encriptar</Text>
        </TouchableOpacity>
