@@ -38,7 +38,7 @@ export  default class AppButton extends Component {
         // const {width} = Dimensions.get('window');
         return (
             <View style={style.container}>
-                <Text>Columna {colum} </Text>
+                <Text style={{textAlign:'center'}}> {colum} </Text>
                 <View style={style.containerNumber}>
                     <Text>{number}</Text>
                     <View style={style.containerButtons}>

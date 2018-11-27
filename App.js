@@ -81,6 +81,8 @@ export default class App extends Component{
   number2:9,
   number3:9,
   changue:false,
+  sustiText:'',
+  transpoText:'',
   Initialabc: [ 'a', 'b', 'c', 'd', 'e', 'f', 'g','h', 'i', 'j', 'k', 'l', 'm', 'n', 'ñ','o','p','q' ,'r',
   's','t','u','v','w','x','y','z', '0', '1','2','3','4','5','6','7','8','9']
       })
@@ -110,7 +112,7 @@ encript(){
   const abcInitial= this.state.Initialabc;
   const letras= [ 'a', 'b', 'c', 'd', 'e', 'f', 'g','h', 'i', 'j', 'k', 'l', 'm', 'n', 'ñ','o','p','q' ,'r',
         's','t','u','v','w','x','y','z']
-const {number1, number2}= this.state;
+const {number1, number2, number3, sustiText}= this.state;
 //Asing letters into arraysgroups
 letras.map( (item, key) => {
 
@@ -127,14 +129,20 @@ letras.map( (item, key) => {
    const listLetters1 = this.substitution(grupo1);
    const listLetters2 =this.invert(grupo2);
    const listLetters3 = this.transp(grupo3);
-   
+   console.warn('sustitucion',listLetters1);
  const criptoArray =  this.addNumbers(listLetters1,listLetters2,listLetters3,abcInitial);
  const encodeDinamic= this.encode(criptoArray, abcInitial);
  return encodeDinamic;
 }
 
 substitution(item){
-  const number= [3,5,2];
+  const {sustiText} =this.state;
+ // const number= [3,5,2];
+  const fragmentSusti= sustiText.split(',');
+  const number= [];
+   fragmentSusti.map(item => {
+    number.push(item);  }) 
+ 
   const keyp = ['d','i','i', 'd'];
   let newitem=item;
   let nnumber=0;
@@ -157,6 +165,7 @@ substitution(item){
     nnumber= nnumber+1;
     nkey= nkey+1;
   })
+
   while (indice < newnumber.length){
 
     if(newitem.length === 1){
@@ -173,39 +182,58 @@ substitution(item){
           if( newkeyp[indice]==='i'){
 
               if( t < (newnumber[indice]%newitem.length)){
-               //  console.warn(t, 'entra1',indice);
+                 //console.warn(t, 'entra1',indice);
                 t = t+  Math.abs(newitem.length-(newnumber[indice]%newitem.length));  
-                // console.warn(t, 'final1',newitem[t]);
+                //console.warn(t, 'final1',newitem[t]);
 
               }
               else {
-              //   console.warn(t, 'entra2',indice);
-
-                t= t - (newnumber[indice]%newitem.length);
-              //   console.warn(t, 'final2',newitem[t]);
+                //console.warn(t, 'entra2',indice,newitem.length);
+                let j=t;
+                j= j - (newnumber[indice]%newitem.length);
+                if(j>newitem.length-1){7
+                  //console.warn('else I', indice)
+                  j=newnumber[indice]%newitem.length;
+                }
+                t=j;
+                 //console.warn(t, 'final2',newitem[t]);
 
               }       
           }
           else {
  
               if ((newnumber[indice]%(newitem.length+1)) + t > newitem.length || (t === newitem.length) ){
-                // console.warn(t, 'entra3',indice);
+               // console.warn(t, 'entra3',indice, newnumber[indice], newitem.length);
                 if(((newnumber[indice])%newitem.length)===0){
                   t= t-1;
                 }
                 else{
-                  t =  t + (newnumber[indice]%(newitem.length)) - (newitem.length) -1 ;
-
+                  let j=t;
+                  j =  j + (newnumber[indice]%(newitem.length)) - (newitem.length) -1 ;
+                  if(j<0){
+                    j =  j + (newnumber[indice]%(newitem.length+1)) - (newitem.length) -2 ;
+                    t=j*(-1);
+                  }else{
+                    t=j
+                  }
+                  
+             /*     if(j<0){
+                  t =  t + (newnumber[indice]%(newitem.length+1)) - (newitem.length) -2 ;
+                 }
+                 else{
+                  t=j;
+                 } */
                 }
                  //console.warn(t, 'final3',newitem[t]);
    
             }
             else {
-               //  console.warn(t, 'entra4',indice);
+             //   console.warn(t, 'entra4',indice);
                if(((newnumber[indice])%newitem.length)===0){
                 t= newnumber[indice]-1;
               }
               else{
+
                 t= t + ((newnumber[indice])%newitem.length) -1;
 
             }
@@ -234,7 +262,12 @@ invert(grupo2){
 }
 
 transp(grupo3){
-  const narray= [ 7,4,1,9];
+  const {transpoText} = this.state;
+  const narray =[];
+  transpoText.split(',').map(item=>{
+    narray.push(item);
+  })
+  //const narray= [ 7,4,1,9];
   const l = Math.floor(grupo3.length/narray.length);
   const resto= grupo3.length%narray.length;
   const letters = [];
@@ -262,6 +295,8 @@ transp(grupo3){
   Object.keys(restarrayLetters).sort().map((items, key) => {
     letters.push(restarrayLetters[items]);
   })
+  console.warn(grupo3);
+  console.warn(letters);
   return letters;
 }
 
@@ -285,7 +320,7 @@ addNumbers(listLetters1,listLetters2,listLetters3){
   //function for changue wletters with secretWord
 
 
-const letterTransform = this.newArrayLetters(arrayFinalCrypto, secretWord);
+const letterTransform = secretWord !== ''? this.newArrayLetters(arrayFinalCrypto, secretWord):arrayFinalCrypto;
 
 
 
@@ -564,7 +599,8 @@ incrementNumber(colum, number){
 
 render() {
     // ...
- const {textsee, activeText, number1, number2, number3} = this.state;
+ const {textsee, activeText, number1, number2, number3,secretWord} = this.state;
+
     return (
      <ScrollView style={style.container}>
        <Image 
@@ -582,19 +618,40 @@ render() {
                         }}
                         returnKeyType="go" />
        <View style={style.contentchangeNumber}>
-       <AppButton colum={1} number={number1} onPress={()=> this.incrementNumber(1, number1)} onPress2={()=> this.decreaseNumber(1, number1)} ></AppButton>
-       <AppButton colum={2} number={number2} onPress={()=> this.incrementNumber(2, number2)} onPress2={()=> this.decreaseNumber(2, number2)} ></AppButton>
-       <AppButton colum={3} number={number3} onPress={()=> this.incrementNumber(3, number3)} onPress2={()=> this.decreaseNumber(3, number3)} ></AppButton>
+       <AppButton colum={"Columna de sustitución"} number={number1} onPress={()=> this.incrementNumber(1, number1)} onPress2={()=> this.decreaseNumber(1, number1)} ></AppButton>
+       <AppButton colum={"Columna de inversión"} number={number2} onPress={()=> this.incrementNumber(2, number2)} onPress2={()=> this.decreaseNumber(2, number2)} ></AppButton>
+       <AppButton colum={"Columna de transposición"} number={number3} onPress={()=> this.incrementNumber(3, number3)} onPress2={()=> this.decreaseNumber(3, number3)} ></AppButton>
        </View>
-       <TextInput       placeholder="Escriba la palabra secreta"
-                        value={this.state.secretWord}
-                        onChangeText={secretWord =>
-                            this.setState({ secretWord })
+       <Text style={{alignSelf:'center', marginTop:30}}>Método de Sustitucion</Text>
+       <TextInput       placeholder="Escriba los números separados por coma, máximo 5 números "
+                        value={this.state.sustiText}
+                        onChangeText={sustiText =>
+                            this.setState({ sustiText })
                         }
                         ref={input => {
                             this.textInput = input;
                         }}
-                        returnKeyType="go" /> 
+                        returnKeyType="go" />
+       <Text style={{alignSelf:'center', marginTop:30}}>Método de transposicion</Text>
+       <TextInput       placeholder="Escriba los números separados por coma, máximo 5 números "
+                        value={this.state.transpoText}
+                        onChangeText={transpoText =>
+                            this.setState({ transpoText })
+                        }
+                        ref={input => {
+                            this.textInput = input;
+                        }}
+                        returnKeyType="go" />  
+        <Text style={{alignSelf:'center', marginTop:30}}>Método de clave secreta</Text>              
+        <TextInput       placeholder="Escriba la palabra secreta (opcional)"
+                        value={this.state.secretWord}
+                        onChangeText={secretWord =>
+                            this.setState({ secretWord})
+                        }
+                        ref={input => {
+                            this.textInput = input;
+                        }}
+                        returnKeyType="go" />                 
         <TouchableOpacity style={style.button} onPress={() => this.encript()} >
          <Text style={style.textButton} >Encriptar</Text>
        </TouchableOpacity>
