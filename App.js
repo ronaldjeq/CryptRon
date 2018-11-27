@@ -83,6 +83,7 @@ export default class App extends Component{
   changue:false,
   sustiText:'',
   transpoText:'',
+  letterStart:'a',
   Initialabc: [ 'a', 'b', 'c', 'd', 'e', 'f', 'g','h', 'i', 'j', 'k', 'l', 'm', 'n', 'ñ','o','p','q' ,'r',
   's','t','u','v','w','x','y','z', '0', '1','2','3','4','5','6','7','8','9']
       })
@@ -129,7 +130,7 @@ letras.map( (item, key) => {
    const listLetters1 = this.substitution(grupo1);
    const listLetters2 =this.invert(grupo2);
    const listLetters3 = this.transp(grupo3);
-   console.warn('sustitucion',listLetters1);
+   //console.warn('sustitucion',listLetters1);
  const criptoArray =  this.addNumbers(listLetters1,listLetters2,listLetters3,abcInitial);
  const encodeDinamic= this.encode(criptoArray, abcInitial);
  return encodeDinamic;
@@ -151,7 +152,7 @@ substitution(item){
   const newkeyp=[];
   let indice=0;
   const cript= [];
-  let t; //podsition actual
+  let t=indice; //podsition actual
   item.map( (letter, key) => {
     if( nkey > keyp.length-1){
       nkey=0;
@@ -166,6 +167,95 @@ substitution(item){
     nkey= nkey+1;
   })
 
+  // while (indice < newnumber.length){
+
+  //   if(newitem.length === 1){
+  //     t=0;
+  //    //  console.warn(t, 'final');
+
+  //   }
+  //   else {
+  //     if( indice===0 /*||  (t ===0 && newitem.length !== 1 )*/) {
+  //      //  console.warn(t, 'entra');
+  //       t = newnumber[indice]%newitem.length;
+  //       }
+  //     else {
+  //         if( newkeyp[indice]==='i'){
+
+  //             if( t < (newnumber[indice]%newitem.length)){
+  //                //console.warn(t, 'entra1',indice);
+  //               t = t+  Math.abs(newitem.length-(newnumber[indice]%newitem.length));  
+  //               //console.warn(t, 'final1',newitem[t]);
+
+  //             }
+  //             else {
+  //               //console.warn(t, 'entra2',indice,newitem.length);
+  //               let j=t;
+  //               j= j - (newnumber[indice]%newitem.length);
+  //               if(j>newitem.length-1){7
+  //                 //console.warn('else I', indice)
+  //                 j=newnumber[indice]%newitem.length;
+  //               }
+  //               t=j;
+  //                //console.warn(t, 'final2',newitem[t]);
+
+  //             }       
+  //         }
+  //         else {
+ 
+  //             if ((newnumber[indice]%(newitem.length+1)) + t > newitem.length || (t === newitem.length) ){
+  //              // console.warn(t, 'entra3',indice, newnumber[indice], newitem.length);
+  //               if(((newnumber[indice])%newitem.length)===0){
+  //                 t= t-1;
+  //               }
+  //               else{
+  //                 let j=t;
+  //                 j =  j + (newnumber[indice]%(newitem.length)) - (newitem.length) -1 ;
+  //                 if(j<0){
+  //                   j =  j + (newnumber[indice]%(newitem.length+1)) - (newitem.length) -2 ;
+  //                   t=j*(-1);
+  //                 }else{
+  //                   t=j
+  //                 }
+                  
+  //            /*     if(j<0){
+  //                 t =  t + (newnumber[indice]%(newitem.length+1)) - (newitem.length) -2 ;
+  //                }
+  //                else{
+  //                 t=j;
+  //                } */
+  //               }
+  //                //console.warn(t, 'final3',newitem[t]);
+   
+  //           }
+  //           else {
+  //            //   console.warn(t, 'entra4',indice);
+  //              if(((newnumber[indice])%newitem.length)===0){
+  //               t= newnumber[indice]-1;
+  //             }
+  //             else{
+
+  //               t= t + ((newnumber[indice])%newitem.length) -1;
+
+  //           }
+   
+  //              }
+  //              // console.warn(t, 'final4',newitem[t]);
+   
+  //         }
+
+  //   }
+  //         }
+
+    
+
+  //   cript.push(newitem[t]);
+  //   newitem.splice(newitem.indexOf(newitem[t]), 1);
+  //   indice=indice+1;
+
+  // }
+
+
   while (indice < newnumber.length){
 
     if(newitem.length === 1){
@@ -174,76 +264,118 @@ substitution(item){
 
     }
     else {
-      if( indice===0 /*||  (t ===0 && newitem.length !== 1 )*/) {
-       //  console.warn(t, 'entra');
-        t = newnumber[indice]%newitem.length;
-        }
-      else {
+      // if( indice===0 /*||  (t ===0 && newitem.length !== 1 )*/) {
+      //  //  console.warn(t, 'entra');
+      //   t = newnumber[indice]%newitem.length;
+      //   }
+    //  else{
           if( newkeyp[indice]==='i'){
 
-              if( t < (newnumber[indice]%newitem.length)){
-                 //console.warn(t, 'entra1',indice);
-                t = t+  Math.abs(newitem.length-(newnumber[indice]%newitem.length));  
-                //console.warn(t, 'final1',newitem[t]);
+
+              if ( t - newnumber[indice] >=0){
+
+                t =  t - newnumber[indice];
+              } else {
+                t =  t - newnumber[indice];
+                while( t<0){
+                  t = newitem.length  + t; 
+                }
 
               }
-              else {
-                //console.warn(t, 'entra2',indice,newitem.length);
-                let j=t;
-                j= j - (newnumber[indice]%newitem.length);
-                if(j>newitem.length-1){7
-                  //console.warn('else I', indice)
-                  j=newnumber[indice]%newitem.length;
-                }
-                t=j;
-                 //console.warn(t, 'final2',newitem[t]);
 
-              }       
+
+
+              // if( t < (newnumber[indice]%newitem.length)){
+              //    //console.warn(t, 'entra1',indice);
+              //   t = t+  Math.abs(newitem.length-(newnumber[indice]%newitem.length));  
+              //   //console.warn(t, 'final1',newitem[t]);
+
+              // }
+              // else {
+              //   //console.warn(t, 'entra2',indice,newitem.length);
+              //   let j=t;
+              //   j= j - (newnumber[indice]%newitem.length);
+              //   if(j>newitem.length-1){7
+              //     //console.warn('else I', indice)
+              //     j=newnumber[indice]%newitem.length;
+              //   }
+              //   t=j;
+              //    //console.warn(t, 'final2',newitem[t]);
+
+              // }       
           }
           else {
- 
-              if ((newnumber[indice]%(newitem.length+1)) + t > newitem.length || (t === newitem.length) ){
-               // console.warn(t, 'entra3',indice, newnumber[indice], newitem.length);
-                if(((newnumber[indice])%newitem.length)===0){
-                  t= t-1;
-                }
-                else{
-                  let j=t;
-                  j =  j + (newnumber[indice]%(newitem.length)) - (newitem.length) -1 ;
-                  if(j<0){
-                    j =  j + (newnumber[indice]%(newitem.length+1)) - (newitem.length) -2 ;
-                    t=j*(-1);
-                  }else{
-                    t=j
+            
+                if ( t + newnumber[indice]  <= newitem.length  ){
+
+                  t =  t + newnumber[indice] -1 ;
+                } else {
+
+                  if(t + newnumber[indice] -1 === newitem.length ){
+                    t = 0;
                   }
+                    else {
+                       t =  t + newnumber[indice]-1;
+                        let count=1;
+                        if(t>newitem.length){
+                          while( t>newitem.length ){
+                            if(indice===0){
+                              console.warn('entro al while', indice);
+                            }
+                 
+                          t =  t- newitem.length; 
+                          
+                          }
+                          t=t-1;
+                        }
+                 
+                    }
+                 
                   
-             /*     if(j<0){
-                  t =  t + (newnumber[indice]%(newitem.length+1)) - (newitem.length) -2 ;
-                 }
-                 else{
-                  t=j;
-                 } */
                 }
-                 //console.warn(t, 'final3',newitem[t]);
+                console.warn(newnumber[indice], indice,t)
+            //   if ((newnumber[indice]%(newitem.length+1)) + t > newitem.length || (t === newitem.length) ){
+            //    // console.warn(t, 'entra3',indice, newnumber[indice], newitem.length);
+            //     if(((newnumber[indice])%newitem.length)===0){
+            //       t= t-1;
+            //     }
+            //     else{
+            //       let j=t;
+            //       j =  j + (newnumber[indice]%(newitem.length)) - (newitem.length) -1 ;
+            //       if(j<0){
+            //         j =  j + (newnumber[indice]%(newitem.length+1)) - (newitem.length) -2 ;
+            //         t=j*(-1);
+            //       }else{
+            //         t=j
+            //       }
+                  
+            //  /*     if(j<0){
+            //       t =  t + (newnumber[indice]%(newitem.length+1)) - (newitem.length) -2 ;
+            //      }
+            //      else{
+            //       t=j;
+            //      } */
+            //     }
+            //      //console.warn(t, 'final3',newitem[t]);
    
-            }
-            else {
-             //   console.warn(t, 'entra4',indice);
-               if(((newnumber[indice])%newitem.length)===0){
-                t= newnumber[indice]-1;
-              }
-              else{
+            // }
+            // else {
+            //  //   console.warn(t, 'entra4',indice);
+            //    if(((newnumber[indice])%newitem.length)===0){
+            //     t= newnumber[indice]-1;
+            //   }
+            //   else{
 
-                t= t + ((newnumber[indice])%newitem.length) -1;
+            //     t= t + ((newnumber[indice])%newitem.length) -1;
 
-            }
+            // }
    
-               }
+            //    }
                // console.warn(t, 'final4',newitem[t]);
    
           }
 
-    }
+   // }
           }
 
     
@@ -253,7 +385,8 @@ substitution(item){
     indice=indice+1;
 
   }
-
+  console.warn(cript);
+  //return(cript);
   return(cript);
 }
 
@@ -295,13 +428,13 @@ transp(grupo3){
   Object.keys(restarrayLetters).sort().map((items, key) => {
     letters.push(restarrayLetters[items]);
   })
-  console.warn(grupo3);
-  console.warn(letters);
+  //console.warn(grupo3);
+  //console.warn(letters);
   return letters;
 }
 
 addNumbers(listLetters1,listLetters2,listLetters3){
-  const {secretWord} = this.state;
+  const {secretWord, letterStart} = this.state;
   const arrayFinalCrypto=[];
   const numberList=[9,7,5,3,1,8,6,4,2,0];
 
@@ -324,9 +457,9 @@ const letterTransform = secretWord !== ''? this.newArrayLetters(arrayFinalCrypto
 
 
 
-
-  const orderLetter = letterTransform.indexOf("l");
-  // added numbers after letter L
+  
+  const orderLetter = letterTransform.indexOf(letterStart);
+  // added numbers after letter 
   numberList.map( (item, key)=> {
     letterTransform.splice(orderLetter + key + 1 , 0, item );
   })
@@ -419,6 +552,7 @@ encode(arrayFinalCrypto, abcInitial){
     let a;
     letra = cript[0];
    if (key>0){ //modified array when exist blank space
+    //console.warn(cript)
       let indicatorElement=0;
        while( indicatorElement < arrayFinalCrypto.length   ){
 
@@ -457,6 +591,9 @@ encode(arrayFinalCrypto, abcInitial){
       //changue states
      this.setState({textEncript:textoEncriptColumns.join(''),textsee:textoEncriptColumns.join(''),arrayCriptoActual:cript,activeText:true,  });
       cripto=cript;
+    //  console.warn('textEncript', textEncript );
+
+
 
   })
   return cripto
@@ -475,7 +612,6 @@ decode(){
   const arraylistReverse= this.invertTextSearch(searchtext.replace(/%/g, " "))
   const textotextoDecodeColumns= this.decodeTextInitialabc(arrayCriptoActual,Initialabc,arraylistReverse)
 
-  
   this.setState({textsee:textotextoDecodeColumns.reverse().join('') });
 }
 
@@ -555,7 +691,7 @@ decodeTextInitialabc(arrayCriptoActual,Initialabc,arraylistReverse){
      textoDecode.push(' ');
      textotextoDecodeColumns.push(textoDecode.join('') )
      this.setState({textInitial:textotextoDecodeColumns.join('') });
-     //console.warn(textotextoDecodeColumns.join(''));
+  //   console.warn(textotextoDecodeColumns.join(''));
 
   }) 
   return textotextoDecodeColumns;
@@ -599,7 +735,8 @@ incrementNumber(colum, number){
 
 render() {
     // ...
- const {textsee, activeText, number1, number2, number3,secretWord} = this.state;
+ const {textsee, activeText, number1, number2, number3,secretWord, textEncript, arrayCriptoActual } = this.state;
+
 
     return (
      <ScrollView style={style.container}>
@@ -622,7 +759,7 @@ render() {
        <AppButton colum={"Columna de inversión"} number={number2} onPress={()=> this.incrementNumber(2, number2)} onPress2={()=> this.decreaseNumber(2, number2)} ></AppButton>
        <AppButton colum={"Columna de transposición"} number={number3} onPress={()=> this.incrementNumber(3, number3)} onPress2={()=> this.decreaseNumber(3, number3)} ></AppButton>
        </View>
-       <Text style={{alignSelf:'center', marginTop:30}}>Método de Sustitucion</Text>
+       <Text style={{alignSelf:'center', marginTop:30}}>Método de Sustitución</Text>
        <TextInput       placeholder="Escriba los números separados por coma, máximo 5 números "
                         value={this.state.sustiText}
                         onChangeText={sustiText =>
@@ -632,7 +769,7 @@ render() {
                             this.textInput = input;
                         }}
                         returnKeyType="go" />
-       <Text style={{alignSelf:'center', marginTop:30}}>Método de transposicion</Text>
+       <Text style={{alignSelf:'center', marginTop:30}}>Método de transposición</Text>
        <TextInput       placeholder="Escriba los números separados por coma, máximo 5 números "
                         value={this.state.transpoText}
                         onChangeText={transpoText =>
@@ -642,6 +779,16 @@ render() {
                             this.textInput = input;
                         }}
                         returnKeyType="go" />  
+        <Text style={{alignSelf:'center', marginTop:30}}>Una vez aplicados los métodos escriba la letra con la que empezará el nuevo abecedario</Text>              
+        <TextInput       placeholder="Escriba la letra"
+                        value={this.state.letterStart}
+                        onChangeText={letterStart =>
+                            this.setState({ letterStart})
+                        }
+                        ref={input => {
+                            this.textInput = input;
+                        }}
+                        returnKeyType="go" />                  
         <Text style={{alignSelf:'center', marginTop:30}}>Método de clave secreta</Text>              
         <TextInput       placeholder="Escriba la palabra secreta (opcional)"
                         value={this.state.secretWord}
