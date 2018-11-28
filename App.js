@@ -5,7 +5,7 @@
  */
 
 import React, { Component } from 'react';
-import { Dimensions,  Text, View, TouchableOpacity, TextInput, Image,ScrollView } from 'react-native';
+import { Dimensions,  Text, View, TouchableOpacity, TextInput, Image,ScrollView, Picker } from 'react-native';
 import AppButton from './aplication/Components/AppButton';
 //import AppButton from './aplication/Components/AppButton';
 
@@ -81,9 +81,13 @@ export default class App extends Component{
   number2:9,
   number3:9,
   changue:false,
-  sustiText:'',
-  transpoText:'',
+  sustiText:'1,4,5',
+  transpoText:'3,5,6',
   letterStart:'a',
+  aplicationType:'normal',
+  orderType:'desc',
+  sustiTextOr:'i,d,d',
+  numberAplication:'5,2,6,3',
   Initialabc: [ 'a', 'b', 'c', 'd', 'e', 'f', 'g','h', 'i', 'j', 'k', 'l', 'm', 'n', 'ñ','o','p','q' ,'r',
   's','t','u','v','w','x','y','z', '0', '1','2','3','4','5','6','7','8','9']
       })
@@ -113,7 +117,7 @@ encript(){
   const abcInitial= this.state.Initialabc;
   const letras= [ 'a', 'b', 'c', 'd', 'e', 'f', 'g','h', 'i', 'j', 'k', 'l', 'm', 'n', 'ñ','o','p','q' ,'r',
         's','t','u','v','w','x','y','z']
-const {number1, number2, number3, sustiText}= this.state;
+const {number1, number2, number3, sustiText, transpoText, sustiTextOr}= this.state;
 //Asing letters into arraysgroups
 letras.map( (item, key) => {
 
@@ -127,9 +131,13 @@ letras.map( (item, key) => {
     grupo3.push(item);
   }
  })
+ const narray =[];
+ transpoText.split(',').map(item=>{
+   narray.push(item);
+ })
    const listLetters1 = this.substitution(grupo1);
    const listLetters2 =this.invert(grupo2);
-   const listLetters3 = this.transp(grupo3);
+   const listLetters3 = this.transp(grupo3, narray);
    //console.warn('sustitucion',listLetters1);
  const criptoArray =  this.addNumbers(listLetters1,listLetters2,listLetters3,abcInitial);
  const encodeDinamic= this.encode(criptoArray, abcInitial);
@@ -137,14 +145,14 @@ letras.map( (item, key) => {
 }
 
 substitution(item){
-  const {sustiText} =this.state;
+  const {sustiText,sustiTextOr } =this.state;
  // const number= [3,5,2];
   const fragmentSusti= sustiText.split(',');
   const number= [];
    fragmentSusti.map(item => {
     number.push(item);  }) 
  
-  const keyp = ['d','i','i', 'd'];
+  const keyp = sustiTextOr.split(','); 
   let newitem=item;
   let nnumber=0;
   let nkey=0;
@@ -167,150 +175,30 @@ substitution(item){
     nkey= nkey+1;
   })
 
-  // while (indice < newnumber.length){
-
-  //   if(newitem.length === 1){
-  //     t=0;
-  //    //  console.warn(t, 'final');
-
-  //   }
-  //   else {
-  //     if( indice===0 /*||  (t ===0 && newitem.length !== 1 )*/) {
-  //      //  console.warn(t, 'entra');
-  //       t = newnumber[indice]%newitem.length;
-  //       }
-  //     else {
-  //         if( newkeyp[indice]==='i'){
-
-  //             if( t < (newnumber[indice]%newitem.length)){
-  //                //console.warn(t, 'entra1',indice);
-  //               t = t+  Math.abs(newitem.length-(newnumber[indice]%newitem.length));  
-  //               //console.warn(t, 'final1',newitem[t]);
-
-  //             }
-  //             else {
-  //               //console.warn(t, 'entra2',indice,newitem.length);
-  //               let j=t;
-  //               j= j - (newnumber[indice]%newitem.length);
-  //               if(j>newitem.length-1){7
-  //                 //console.warn('else I', indice)
-  //                 j=newnumber[indice]%newitem.length;
-  //               }
-  //               t=j;
-  //                //console.warn(t, 'final2',newitem[t]);
-
-  //             }       
-  //         }
-  //         else {
  
-  //             if ((newnumber[indice]%(newitem.length+1)) + t > newitem.length || (t === newitem.length) ){
-  //              // console.warn(t, 'entra3',indice, newnumber[indice], newitem.length);
-  //               if(((newnumber[indice])%newitem.length)===0){
-  //                 t= t-1;
-  //               }
-  //               else{
-  //                 let j=t;
-  //                 j =  j + (newnumber[indice]%(newitem.length)) - (newitem.length) -1 ;
-  //                 if(j<0){
-  //                   j =  j + (newnumber[indice]%(newitem.length+1)) - (newitem.length) -2 ;
-  //                   t=j*(-1);
-  //                 }else{
-  //                   t=j
-  //                 }
-                  
-  //            /*     if(j<0){
-  //                 t =  t + (newnumber[indice]%(newitem.length+1)) - (newitem.length) -2 ;
-  //                }
-  //                else{
-  //                 t=j;
-  //                } */
-  //               }
-  //                //console.warn(t, 'final3',newitem[t]);
-   
-  //           }
-  //           else {
-  //            //   console.warn(t, 'entra4',indice);
-  //              if(((newnumber[indice])%newitem.length)===0){
-  //               t= newnumber[indice]-1;
-  //             }
-  //             else{
-
-  //               t= t + ((newnumber[indice])%newitem.length) -1;
-
-  //           }
-   
-  //              }
-  //              // console.warn(t, 'final4',newitem[t]);
-   
-  //         }
-
-  //   }
-  //         }
-
-    
-
-  //   cript.push(newitem[t]);
-  //   newitem.splice(newitem.indexOf(newitem[t]), 1);
-  //   indice=indice+1;
-
-  // }
 
 
   while (indice < newnumber.length){
 
     if(newitem.length === 1){
       t=0;
-     //  console.warn(t, 'final');
-
     }
     else {
-      // if( indice===0 /*||  (t ===0 && newitem.length !== 1 )*/) {
-      //  //  console.warn(t, 'entra');
-      //   t = newnumber[indice]%newitem.length;
-      //   }
-    //  else{
           if( newkeyp[indice]==='i'){
-
-
               if ( t - newnumber[indice] >=0){
-
                 t =  t - newnumber[indice];
               } else {
                 t =  t - newnumber[indice];
                 while( t<0){
                   t = newitem.length  + t; 
                 }
-
               }
-
-
-
-              // if( t < (newnumber[indice]%newitem.length)){
-              //    //console.warn(t, 'entra1',indice);
-              //   t = t+  Math.abs(newitem.length-(newnumber[indice]%newitem.length));  
-              //   //console.warn(t, 'final1',newitem[t]);
-
-              // }
-              // else {
-              //   //console.warn(t, 'entra2',indice,newitem.length);
-              //   let j=t;
-              //   j= j - (newnumber[indice]%newitem.length);
-              //   if(j>newitem.length-1){7
-              //     //console.warn('else I', indice)
-              //     j=newnumber[indice]%newitem.length;
-              //   }
-              //   t=j;
-              //    //console.warn(t, 'final2',newitem[t]);
-
-              // }       
           }
           else {
             
                 if ( t + newnumber[indice]  <= newitem.length  ){
-
                   t =  t + newnumber[indice] -1 ;
                 } else {
-
                   if(t + newnumber[indice] -1 === newitem.length ){
                     t = 0;
                   }
@@ -320,72 +208,19 @@ substitution(item){
                         if(t>newitem.length){
                           while( t>newitem.length ){
                             if(indice===0){
-                              console.warn('entro al while', indice);
                             }
-                 
                           t =  t- newitem.length; 
-                          
                           }
                           t=t-1;
                         }
-                 
                     }
-                 
-                  
                 }
-                console.warn(newnumber[indice], indice,t)
-            //   if ((newnumber[indice]%(newitem.length+1)) + t > newitem.length || (t === newitem.length) ){
-            //    // console.warn(t, 'entra3',indice, newnumber[indice], newitem.length);
-            //     if(((newnumber[indice])%newitem.length)===0){
-            //       t= t-1;
-            //     }
-            //     else{
-            //       let j=t;
-            //       j =  j + (newnumber[indice]%(newitem.length)) - (newitem.length) -1 ;
-            //       if(j<0){
-            //         j =  j + (newnumber[indice]%(newitem.length+1)) - (newitem.length) -2 ;
-            //         t=j*(-1);
-            //       }else{
-            //         t=j
-            //       }
-                  
-            //  /*     if(j<0){
-            //       t =  t + (newnumber[indice]%(newitem.length+1)) - (newitem.length) -2 ;
-            //      }
-            //      else{
-            //       t=j;
-            //      } */
-            //     }
-            //      //console.warn(t, 'final3',newitem[t]);
-   
-            // }
-            // else {
-            //  //   console.warn(t, 'entra4',indice);
-            //    if(((newnumber[indice])%newitem.length)===0){
-            //     t= newnumber[indice]-1;
-            //   }
-            //   else{
-
-            //     t= t + ((newnumber[indice])%newitem.length) -1;
-
-            // }
-   
-            //    }
-               // console.warn(t, 'final4',newitem[t]);
-   
           }
-
-   // }
           }
-
-    
-
     cript.push(newitem[t]);
     newitem.splice(newitem.indexOf(newitem[t]), 1);
     indice=indice+1;
-
   }
-  console.warn(cript);
   //return(cript);
   return(cript);
 }
@@ -394,12 +229,9 @@ invert(grupo2){
   return grupo2.reverse();
 }
 
-transp(grupo3){
-  const {transpoText} = this.state;
-  const narray =[];
-  transpoText.split(',').map(item=>{
-    narray.push(item);
-  })
+transp(grupo3,narray){
+
+
   //const narray= [ 7,4,1,9];
   const l = Math.floor(grupo3.length/narray.length);
   const resto= grupo3.length%narray.length;
@@ -413,7 +245,9 @@ transp(grupo3){
       arrayLetters[item] = grupo3[key+t*narray.length];
     })
     
+    //console.warn('d',arrayLetters);
     Object.keys(arrayLetters).map((items, key) => {
+    //  console.warn('¡',items);
       letters.push(arrayLetters[items]);
     })
     t=t+1;
@@ -425,16 +259,18 @@ transp(grupo3){
     restarrayLetters[letter] = grupo3[item];
     restt=restt+1;
   }
-  Object.keys(restarrayLetters).sort().map((items, key) => {
+  Object.keys(restarrayLetters).map((items, key) => {
+    console.warn('V;0',items);
     letters.push(restarrayLetters[items]);
   })
   //console.warn(grupo3);
-  //console.warn(letters);
+ // console.warn(letters, 'letters');
+ //console.warn(letters);
   return letters;
 }
 
 addNumbers(listLetters1,listLetters2,listLetters3){
-  const {secretWord, letterStart} = this.state;
+  const {secretWord, letterStart, aplicationType} = this.state;
   const arrayFinalCrypto=[];
   const numberList=[9,7,5,3,1,8,6,4,2,0];
 
@@ -455,9 +291,10 @@ addNumbers(listLetters1,listLetters2,listLetters3){
 
 const letterTransform = secretWord !== ''? this.newArrayLetters(arrayFinalCrypto, secretWord):arrayFinalCrypto;
 
+//console.warn(letterTransform);
 
-
-  
+  const aplicationLetter = aplicationType==='normal'? this.aplicationDouble(letterTransform):letterTransform;
+  //console.warn(aplicationLetter);
   const orderLetter = letterTransform.indexOf(letterStart);
   // added numbers after letter 
   numberList.map( (item, key)=> {
@@ -467,9 +304,99 @@ const letterTransform = secretWord !== ''? this.newArrayLetters(arrayFinalCrypto
   
 
 
-
+ 
   return letterTransform;
 }
+//method using double application
+aplicationDouble(letterTransform){
+  const {orderType, numberAplication} = this.state;
+ const keys = [];
+  numberAplication.split(",").map((item => {
+    keys.push(parseInt(item));
+  }))
+
+  const numericKey = keys.sort((a, b) => a - b );
+ // console.warn('n',numericKey);
+  let newNumericKey = orderType==='asc'? numericKey.sort((a, b) => b - a ):numericKey.sort((a, b) => a - b ) ;
+ // console.warn('d',newNumericKey);
+  const firstarray =  this.firstMethod([].concat(newNumericKey), letterTransform, numericKey);
+  const secondArray = this.firstMethod([].concat(newNumericKey), firstarray, numericKey);
+ // console.warn(newNumericKey);
+ // console.warn(newNumericKey,secondArray);
+  //console.warn(secondArray);
+  return secondArray;
+
+}
+
+firstMethod(newNumericKey, letterTransform, numericKey){
+  let indicatorNumber=0;
+  const repetition= 27%newNumericKey.length >0? Math.trunc(27/newNumericKey.length )+1:Math.trunc(27/newNumericKey.length ) ;
+  let t=0;
+  const arraytemporal=[];
+  const arraytemporal2=[];
+  //const arraytemporal=transp(letterTransform,numericKey);
+  
+  while(indicatorNumber<repetition){
+    const object={};
+
+    for( let i =0; i< numericKey.length; i++ ){
+       object[newNumericKey[i]] = letterTransform[t];
+       t=t+1 
+    }
+
+    arraytemporal.push(object);
+    indicatorNumber=indicatorNumber+1;
+  }
+  //console.warn(arraytemporal.length)
+  
+  newNumericKey.sort((a, b) => a - b ).map( (item, key) =>{
+ //   console.warn(item, key);
+      for( let i =0; i< arraytemporal.length; i++ ) {
+        //console.warn(arraytemporal[i][item]);
+       arraytemporal2.push(arraytemporal[i][item]);
+      }
+    
+
+    })
+     
+  //  console.warn(arraytemporal2);
+   // console.warn(arraytemporal2.filter(Boolean));
+
+return arraytemporal2.filter(Boolean);
+}
+
+secondMethod(firstarray, numericKey, newNumericKey){
+  let indicatorNumber=0;
+  const repetition= 27%newNumericKey.length >0? Math.trunc(27/newNumericKey.length )+1:Math.trunc(27/newNumericKey.length ) ;
+  let t=0;
+  const arraytemporal=[]
+  const arraytemporal2=[]
+  //const arraytemporal=transp(letterTransform,numericKey);
+  
+  while(indicatorNumber<repetition){
+    const object={};
+
+    for( let i =0; i< numericKey.length; i++ ){
+       object[newNumericKey[i]] = letterTransform[t];
+       t=t+1 
+    }
+    
+    arraytemporal.push(object);
+   // arraytemporal2.push([Object.values(object)]);
+    indicatorNumber=indicatorNumber+1;
+  }
+
+  arraytemporal.map((item, key) => {
+    item.map((item, key )=>{
+      //console.warn(key);
+    })
+
+})
+
+ // console.warn(arraytemporal2)
+return   arraytemporal;
+}
+
 
 // method using secret Word
 newArrayLetters(arrayFinalCrypto, secretWord){
@@ -517,8 +444,8 @@ newArrayLetters(arrayFinalCrypto, secretWord){
     }
 
     //arraytemporal[repetition-1].filter(Boolean);
-    const newListLetters = this.orderLetter(arraytemporal);
-
+  const newListLetters = this.orderLetter(arraytemporal);
+  //console.warn('?',newListLetters);
   return newListLetters;
 
 
@@ -596,6 +523,7 @@ encode(arrayFinalCrypto, abcInitial){
 
 
   })
+
   return cripto
 }
 
@@ -735,8 +663,7 @@ incrementNumber(colum, number){
 
 render() {
     // ...
- const {textsee, activeText, number1, number2, number3,secretWord, textEncript, arrayCriptoActual } = this.state;
-
+ const {textsee, activeText, number1, number2, number3,aplicationType, textEncript, arrayCriptoActual } = this.state;
 
     return (
      <ScrollView style={style.container}>
@@ -755,9 +682,9 @@ render() {
                         }}
                         returnKeyType="go" />
        <View style={style.contentchangeNumber}>
-       <AppButton colum={"Columna de sustitución"} number={number1} onPress={()=> this.incrementNumber(1, number1)} onPress2={()=> this.decreaseNumber(1, number1)} ></AppButton>
-       <AppButton colum={"Columna de inversión"} number={number2} onPress={()=> this.incrementNumber(2, number2)} onPress2={()=> this.decreaseNumber(2, number2)} ></AppButton>
-       <AppButton colum={"Columna de transposición"} number={number3} onPress={()=> this.incrementNumber(3, number3)} onPress2={()=> this.decreaseNumber(3, number3)} ></AppButton>
+       <AppButton colum={"Letras con método de sustitución"} number={number1} onPress={()=> this.incrementNumber(1, number1)} onPress2={()=> this.decreaseNumber(1, number1)} ></AppButton>
+       <AppButton colum={"Letras con método de inversión"} number={number2} onPress={()=> this.incrementNumber(2, number2)} onPress2={()=> this.decreaseNumber(2, number2)} ></AppButton>
+       <AppButton colum={"Letras con método de transposición"} number={number3} onPress={()=> this.incrementNumber(3, number3)} onPress2={()=> this.decreaseNumber(3, number3)} ></AppButton>
        </View>
        <Text style={{alignSelf:'center', marginTop:30}}>Método de Sustitución</Text>
        <TextInput       placeholder="Escriba los números separados por coma, máximo 5 números "
@@ -769,6 +696,15 @@ render() {
                             this.textInput = input;
                         }}
                         returnKeyType="go" />
+        <TextInput       placeholder="Escriba el ordenamiento separado por comas, ejem:: i,d,i "
+                        value={this.state.sustiTextOr}
+                        onChangeText={sustiTextOr =>
+                            this.setState({ sustiTextOr })
+                        }
+                        ref={input => {
+                            this.textInput = input;
+                        }}
+                        returnKeyType="go" />                 
        <Text style={{alignSelf:'center', marginTop:30}}>Método de transposición</Text>
        <TextInput       placeholder="Escriba los números separados por coma, máximo 5 números "
                         value={this.state.transpoText}
@@ -798,7 +734,25 @@ render() {
                         ref={input => {
                             this.textInput = input;
                         }}
-                        returnKeyType="go" />                 
+                        returnKeyType="go" /> 
+        <Text style={{alignSelf:'center', marginTop:30}}>Elija una opción</Text>   
+        <Picker
+          selectedValue={this.state.aplicationType}
+          style={{ height: 50, width: 240, alignSelf:'center' }}
+          onValueChange={(itemValue, itemIndex) => this.setState({aplicationType: itemValue})}>
+          <Picker.Item label="Doble aplicación" value="normal" />
+          <Picker.Item label="Doble aplicación gradual" value="gradual" />
+        </Picker>
+        <TextInput       placeholder="Escriba los números "
+                        value={this.state.numberAplication}
+                        onChangeText={numberAplication =>
+                            this.setState({ numberAplication})
+                        }
+                        ref={input => {
+                            this.textInput = input;
+                        }}
+                        returnKeyType="go"
+                        style={{width:140}} />                               
         <TouchableOpacity style={style.button} onPress={() => this.encript()} >
          <Text style={style.textButton} >Encriptar</Text>
        </TouchableOpacity>
