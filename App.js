@@ -88,6 +88,8 @@ export default class App extends Component{
   orderType:'desc',
   sustiTextOr:'i,d,d',
   numberAplication:'5,2,6,3',
+  activeEncode:false,
+  abcalterated:[],
   Initialabc: [ 'a', 'b', 'c', 'd', 'e', 'f', 'g','h', 'i', 'j', 'k', 'l', 'm', 'n', 'ñ','o','p','q' ,'r',
   's','t','u','v','w','x','y','z', '0', '1','2','3','4','5','6','7','8','9']
       })
@@ -108,17 +110,27 @@ componentDidUpdate( prevState ) {
       // return response
   }
 }
-
+shuffleArray() {
+  const le =[ 'a', 'b', 'c', 'd', 'e', 'f', 'g','h', 'i', 'j', 'k', 'l', 'm', 'n', 'ñ','o','p','q' ,'r',
+  's','t','u','v','w','x','y','z'];
+  for (let i = le.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [le[i], le[j]] = [le[j], le[i]];
+  }
+  this.setState({abcalterated:le});
+  return le;
+}
 encript(){
   const grupo1 = [];
   const grupo2 = [];
   const grupo3 = [];
 
   const abcInitial= this.state.Initialabc;
-  const letras= [ 'a', 'b', 'c', 'd', 'e', 'f', 'g','h', 'i', 'j', 'k', 'l', 'm', 'n', 'ñ','o','p','q' ,'r',
-        's','t','u','v','w','x','y','z']
-const {number1, number2, number3, sustiText, transpoText, sustiTextOr}= this.state;
+const {number1, number2, number3, sustiText, transpoText, sustiTextOr,activeEncode,abcalterated}= this.state;
+const letras= activeEncode?this.shuffleArray():abcalterated;
+
 //Asing letters into arraysgroups
+console.warn(letras);
 letras.map( (item, key) => {
 
     if(key<number1){
@@ -663,8 +675,7 @@ incrementNumber(colum, number){
 
 render() {
     // ...
- const {textsee, activeText, number1, number2, number3,aplicationType, textEncript, arrayCriptoActual } = this.state;
-
+ const {textsee, activeText, number1, number2, number3,aplicationType,activeEncode, textEncript, arrayCriptoActual } = this.state;
     return (
      <ScrollView style={style.container}>
        <Image 
@@ -753,10 +764,23 @@ render() {
                         }}
                         returnKeyType="go"
                         style={{width:140}} />                               
-        <TouchableOpacity style={style.button} onPress={() => this.encript()} >
+        <TouchableOpacity style={style.button} onPress={() => 
+          this.setState({
+            activeEncode: true
+        }, () => {
+          this.encript();
+        })
+        } >
          <Text style={style.textButton} >Encriptar</Text>
        </TouchableOpacity>
-       <TouchableOpacity style={style.button} onPress={() => this.decode()} >
+       <TouchableOpacity style={style.button} onPress={() =>
+        
+        this.setState({
+          activeEncode: false
+      }, () => {
+        this.decode();
+      })
+      } >
          <Text style={style.textButton} >Desciffrar</Text>
        </TouchableOpacity>
        {
