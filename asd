@@ -395,9 +395,7 @@ firstMethod(newNumericKey, letterTransform, numericKey){
     const object={};
 
     for( let i =0; i< numericKey.length; i++ ){
-      if(letterTransform[t]!==''|| letterTransform[t]!==undefined){
-        object[newNumericKey[i]] = letterTransform[t];
-      }
+       object[newNumericKey[i]] = letterTransform[t];
        t=t+1 
     }
 
@@ -458,15 +456,15 @@ let a;
 
       while(order <numericKey.length ){
         let letter = letterTransform[newNumericKey[i]][r];
-        if(letter!==undefined && letter!=="" ){
+        if(letter!==undefined){
 
                          object[numericKey[order]].push(letter);
                          letterTransform[newNumericKey[i]].splice(letterTransform[newNumericKey[i]].indexOf(letter),1);
                         a=i;
                }
-               else if(i+1 < numericKey.length && letter!=="") {
+               else if(i+1 < numericKey.length) {
                 letter=letterTransform[newNumericKey[i+1]][r];
-                if(letter!==undefined&& letter!==""){
+                if(letter!==undefined){
                 object[numericKey[order]].push(letter);      
                 letterTransform[newNumericKey[i+1]].splice(letterTransform[newNumericKey[i+1]].indexOf(letter),1);
                 a=i+1;
