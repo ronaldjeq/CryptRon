@@ -460,12 +460,61 @@ thirdMethod(newNumericKey, letterTransform, numericKey){
 console.warn(newNumericKey);
 console.warn(letterTransform['2']);
  let i=0;
- let repeatKey=true;
-   while(indicatorNumber<newNumericKey.length){
-   while(   i< numericKey.length ){
-      i= i > 0 && letterTransform[newNumericKey[i-1]].length>0  ? i-1 : i;
+ let j=i;
+let a;
+ //let repeatKey=false;
+ //let repeatKeyb=false;
+  // while(indicatorNumber<newNumericKey.length){
+    const r=0;
+  while( i < numericKey.length){
+    let order= numericKey.indexOf(newNumericKey[j]);
+
+      while(order <numericKey.length ){
+        let letter = letterTransform[newNumericKey[i]][r];
+        if(letter!==undefined){
+          console.warn(letterTransform[newNumericKey[i]][r]);
+                 console.warn('ok?',object[numericKey[order]],letter)
+                         object[numericKey[order]].push(letter);
+                          console.warn('nose',letterTransform[newNumericKey[i]]);
+                         letterTransform[newNumericKey[i]].splice(letterTransform[newNumericKey[i]].indexOf(letter),1);
+                         //repeatKey=false;
+                        // repeatKeyb=false;
+                        a=i;
+               }
+               else if(i+1 < numericKey.length) {
+                console.warn('entra a exta exception')
+                letter=letterTransform[newNumericKey[i+1]][r];
+                if(letter!==undefined){
+                  console.warn('ok?',object[numericKey[order]],letter)
+                object[numericKey[order]].push(letter);
+                console.warn('nose',letterTransform[newNumericKey[i+1]]);
+      
+                letterTransform[newNumericKey[i+1]].splice(letterTransform[newNumericKey[i+1]].indexOf(letter),1);
+                a=i+1;
+                //repeatKey=true;
+                //repeatKeyb=true;
+                //orderLetter=orderLetter+1;
+                }
+               }
+
+               if( letterTransform[newNumericKey[a]].length===0 && order=== numericKey.length-1){
+                j=j+1;
+             }
+        order=order+1;
+      }
+
+        i=letterTransform[newNumericKey[i]].length===0?i+1:i;
+  
+  }
+  {
+     /*  while(   i < numericKey.length ){
+     // i= i > 0 && letterTransform[newNumericKey[i-1]].length >0  ? i-1 : i;
    // let orderLetter = i > 0 && letterTransform[newNumericKey[i-1]].length>0?numericKey.indexOf(newNumericKey[i-1]):numericKey.indexOf(newNumericKey[i]);
-    let orderLetter = numericKey.indexOf(newNumericKey[i]);
+   console.warn(repeatKey, i)
+  // let orderLetter = i > 0 && repeatKey?numericKey.indexOf(newNumericKey[i-1]):numericKey.indexOf(newNumericKey[i]);
+  let orderLetter = repeatKeyb?numericKey.indexOf(newNumericKey[i-1]):numericKey.indexOf(newNumericKey[i]);
+   console.warn(i,orderLetter);
+  //let orderLetter = numericKey.indexOf(newNumericKey[i]);
   //   console.warn(newNumericKey[i]);
   //   console.warn('order',orderLetter,letterTransform[newNumericKey[i]]);
      const r=0;
@@ -477,17 +526,23 @@ console.warn(letterTransform['2']);
                    object[numericKey[orderLetter]].push(letter);
                     console.warn('nose',letterTransform[newNumericKey[i]]);
                    letterTransform[newNumericKey[i]].splice(letterTransform[newNumericKey[i]].indexOf(letter),1);
-                   repeatKey=true;
+                   repeatKey=false;
+                   repeatKeyb=false;
          }
          else if(i+1 < numericKey.length) {
           console.warn('entra a exta exception')
           letter=letterTransform[newNumericKey[i+1]][r];
-          console.warn('ok?',object[numericKey[orderLetter]],letter)
+          if(letter!==undefined){
+            console.warn('ok?',object[numericKey[orderLetter]],letter)
           object[numericKey[orderLetter]].push(letter);
           console.warn('nose',letterTransform[newNumericKey[i+1]]);
 
           letterTransform[newNumericKey[i+1]].splice(letterTransform[newNumericKey[i+1]].indexOf(letter),1);
-         
+          repeatKey=true;
+          repeatKeyb=true;
+          //orderLetter=orderLetter+1;
+          }
+          
          }
         orderLetter=orderLetter+1;
       }
@@ -501,12 +556,21 @@ console.warn(letterTransform['2']);
 
       //  }
       console.warn('i',i);
-        i=i+1 
-    }
+        i=repeatKey?i+1:i;
+        if(!repeatKey){
+          repeatKey= letterTransform[newNumericKey[i]].length >0?true:false;
+
+        }
+    
+      //  i= letterTransform[newNumericKey[i]].length >0? i:i+1;
+      i= repeatKey? i:i+1;
+    } */
 
   //   //arraytemporal.push(object);
-     indicatorNumber=indicatorNumber+1;
-   }
+    // indicatorNumber=indicatorNumber+1;
+  // }
+  }
+ 
   console.warn(letterTransform);
   console.warn(object);
   //console.warn(arraytemporal.length)
@@ -525,6 +589,8 @@ console.warn(letterTransform['2']);
    // console.warn(arraytemporal2.filter(Boolean));
 //console.warn('arr', arraytemporal2.filter(Boolean) )
 //return arra.filter(Boolean);
+
+console.warn(Object.values(object));
 return []
 }
 
