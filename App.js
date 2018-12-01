@@ -165,11 +165,11 @@ letras.map( (item, key) => {
    narray.push(item);
  })
    const listLetters1 = this.substitution(grupo1);
-   console.warn('substitution',listLetters1);
+  // console.warn('substitution',listLetters1);
    const listLetters2 =this.invert(grupo2);
-   console.warn('invert',listLetters2);
+   //console.warn('invert',listLetters2);
    const listLetters3 = this.transp(grupo3, narray);
-   console.warn('transp',listLetters3);
+  // console.warn('transp',listLetters3);
  const criptoArray =  this.addNumbers(listLetters1,listLetters2,listLetters3,abcInitial);
  console.warn('addNumbers',criptoArray);
  console.warn('addNumbers longitud',criptoArray.length);
@@ -256,7 +256,7 @@ substitution(item){
     indice=indice+1;
   }
   //return(cript);
- console.warn('sustitucion',cript);
+ //console.warn('sustitucion',cript);
   return(cript);
 }
 
@@ -369,7 +369,12 @@ aplicationDouble(letterTransform){
   }))
 
   const numericKey = keys;
-  let newNumericKey = orderType==='asc'? numericKey.sort((a, b) => b - a ):numericKey.sort((a, b) => a - b ) ;
+
+  const newNumericKey = [].concat(numericKey);
+  
+   if(orderType==='desc'){
+    newNumericKey.sort((a, b) => b - a )}
+    else{newNumericKey.sort((a, b) => a - b ) };
 
   const firstarray =  this.firstMethod([].concat(newNumericKey), letterTransform, numericKey);
   console.warn('firstarray normal',firstarray)
@@ -385,13 +390,32 @@ aplicationDouble(letterTransform){
 }
 
 firstMethod(newNumericKey, letterTransform, numericKey){
-  let indicatorNumber=0;
+  console.warn('newNumericKey',newNumericKey,'numericKey',numericKey);
   const repetition= 54%newNumericKey.length >0? Math.trunc(54/newNumericKey.length )+1:Math.trunc(54/newNumericKey.length ) ;
   let t=0;
   const arraytemporal=[];
   const arraytemporal2=[];
-  
-  while(indicatorNumber<repetition){
+  const object={};
+  for( let i =0; i< numericKey.length; i++ ){
+    object[newNumericKey[i]] = [];
+ }
+console.warn('object',object);
+
+while ( t < letterTransform.length){
+  let indicatorNumber=0;
+  while(indicatorNumber < numericKey.length){
+    if(letterTransform[t]!==undefined){
+      object[newNumericKey[indicatorNumber]].push(letterTransform[t]);
+    }
+    t=t+1;
+    indicatorNumber=indicatorNumber+1
+  }
+
+}
+
+//console.warn('object2',object);
+
+/*   while(indicatorNumber<repetition){
     const object={};
 
     for( let i =0; i< numericKey.length; i++ ){
@@ -403,16 +427,17 @@ firstMethod(newNumericKey, letterTransform, numericKey){
 
     arraytemporal.push(object);
     indicatorNumber=indicatorNumber+1;
-  }
+  } */
   
-  newNumericKey.sort((a, b) => a - b ).map( (item, key) =>{
+/*   newNumericKey.sort((a, b) => a - b ).map( (item, key) =>{
       for( let i =0; i< arraytemporal.length; i++ ) {
        arraytemporal2.push(arraytemporal[i][item]);
       }
     
 
-    })
-return arraytemporal2.filter(Boolean);
+    }) */
+//return arraytemporal2.filter(Boolean);
+return Object.values(object).join().split(',');
 }
 
 secondMethod(newNumericKey, letterTransform, numericKey){
