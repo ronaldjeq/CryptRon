@@ -5,7 +5,7 @@
  */
 
 import React, { Component } from 'react';
-import { Dimensions,  Text, View, TouchableOpacity, TextInput, Image,ScrollView, Picker } from 'react-native';
+import { Dimensions, Switch , Text, View, TouchableOpacity, TextInput, Image,ScrollView, Picker } from 'react-native';
 import AppButton from './aplication/Components/AppButton';
 //import AppButton from './aplication/Components/AppButton';
 
@@ -171,8 +171,8 @@ letras.map( (item, key) => {
    const listLetters3 = this.transp(grupo3, narray);
   // console.warn('transp',listLetters3);
  const criptoArray =  this.addNumbers(listLetters1,listLetters2,listLetters3,abcInitial);
- console.warn('addNumbers',criptoArray);
- console.warn('addNumbers longitud',criptoArray.length);
+// console.warn('addNumbers',criptoArray);
+ // console.warn('addNumbers longitud',criptoArray.length);
 
  const encodeDinamic= this.encode(criptoArray, abcInitial);
  return encodeDinamic;
@@ -327,6 +327,7 @@ const aplicationLetter = aplicationType ==='normal'? this.aplicationDouble(lette
 
 
   const orderLetter = aplicationLetter.indexOf(letterNumber);
+
   // added numbers after letter 
   numberList.map( (item, key)=> {
     aplicationLetter.splice(orderLetter + key + 1 , 0, item );
@@ -349,12 +350,12 @@ aplicationDoubleGradual(letterTransform){
   const numericKey = keys;
   let newNumericKey = orderType==='desc'? [].concat(numericKey).sort((a, b) => b - a ):[].concat(numericKey).sort((a, b) => a - b ) ;
   const firstarray =  this.secondMethod([].concat(newNumericKey), letterTransform, numericKey);
-  console.warn('firstarray gradual',firstarray)
-  console.warn('firstarray longitud gradual',firstarray.length)
+ // console.warn('firstarray gradual',firstarray)
+ // console.warn('firstarray longitud gradual',firstarray.length)
 
-  const secondArray = this.thirdMethod([].concat(newNumericKey), firstarray, numericKey);
-  console.warn('secondArray gradual',secondArray)
-  console.warn('secondArray longitud gradual',secondArray.length)
+  const secondArray = this.thirdMethod([].concat(newNumericKey), firstarray, numericKey,letterTransform);
+  //console.warn('secondArray gradual',secondArray)
+  //console.warn('secondArray longitud gradual',secondArray.length)
 
 
   return secondArray;
@@ -377,12 +378,12 @@ aplicationDouble(letterTransform){
     else{newNumericKey.sort((a, b) => a - b ) };
 
   const firstarray =  this.firstMethod([].concat(newNumericKey), letterTransform, numericKey);
-  console.warn('firstarray normal',firstarray)
-  console.warn('firstarray longitud normal',firstarray.length)
+  //console.warn('firstarray normal',firstarray)
+ //console.warn('firstarray longitud normal',firstarray.length)
 
   const secondArray = this.firstMethod([].concat(newNumericKey), firstarray, numericKey);
-  console.warn('secondArray normal',secondArray)
-  console.warn('secondArray longitud normal',secondArray.length)
+  //console.warn('secondArray normal',secondArray)
+  //console.warn('secondArray longitud normal',secondArray.length)
 
 
   return secondArray;
@@ -390,16 +391,13 @@ aplicationDouble(letterTransform){
 }
 
 firstMethod(newNumericKey, letterTransform, numericKey){
-  console.warn('newNumericKey',newNumericKey,'numericKey',numericKey);
-  const repetition= 54%newNumericKey.length >0? Math.trunc(54/newNumericKey.length )+1:Math.trunc(54/newNumericKey.length ) ;
+ // console.warn('newNumericKey',newNumericKey,'numericKey',numericKey);
   let t=0;
-  const arraytemporal=[];
-  const arraytemporal2=[];
   const object={};
   for( let i =0; i< numericKey.length; i++ ){
     object[newNumericKey[i]] = [];
  }
-console.warn('object',object);
+//console.warn('object',object);
 
 while ( t < letterTransform.length){
   let indicatorNumber=0;
@@ -414,35 +412,19 @@ while ( t < letterTransform.length){
 }
 
 //console.warn('object2',object);
-
-/*   while(indicatorNumber<repetition){
-    const object={};
-
-    for( let i =0; i< numericKey.length; i++ ){
-      if(letterTransform[t]!==''|| letterTransform[t]!==undefined){
-        object[newNumericKey[i]] = letterTransform[t];
-      }
-       t=t+1 
-    }
-
-    arraytemporal.push(object);
-    indicatorNumber=indicatorNumber+1;
-  } */
-  
-/*   newNumericKey.sort((a, b) => a - b ).map( (item, key) =>{
-      for( let i =0; i< arraytemporal.length; i++ ) {
-       arraytemporal2.push(arraytemporal[i][item]);
-      }
-    
-
-    }) */
+//console.warn(Object.values(object).join().split(','))
 //return arraytemporal2.filter(Boolean);
+//const finalArray = this.transform(object);
+//console.warn(object)
 return Object.values(object).join().split(',');
+
+
 }
 
 secondMethod(newNumericKey, letterTransform, numericKey){
   let indicatorNumber=0;
-  const repetition= 54%newNumericKey.length >0? Math.trunc(54/newNumericKey.length )+1:Math.trunc(54/newNumericKey.length ) ;
+  const longitudArray= letterTransform.length
+const repetition= longitudArray%newNumericKey.length >0? Math.trunc(longitudArray/newNumericKey.length )+1:Math.trunc(longitudArray/newNumericKey.length ) ;
   let t=0;
   const object={};
   for( let i =0; i< numericKey.length; i++ ){
@@ -454,7 +436,6 @@ secondMethod(newNumericKey, letterTransform, numericKey){
     for( let i =0; i< numericKey.length; i++ ){
       if(letterTransform[t]!==undefined){
         object[newNumericKey[i]].push(letterTransform[t]);
-
       }
        t=t+1 
     }
@@ -467,52 +448,67 @@ secondMethod(newNumericKey, letterTransform, numericKey){
 return object
 }
 
-thirdMethod(newNumericKey, letterTransform, numericKey){
+thirdMethod(newNumericKey, newArrayLetters, numericKey,letterTransform){
   const object={};
   for( let i =0; i< numericKey.length; i++ ){
     object[numericKey[i]] = [];
  }
- newNumericKey.sort((a, b) => a - b );
+// console.warn('object',object);
+// console.warn('newArrayLetters',newArrayLetters);
+ //newNumericKey.sort((a, b) => a - b );
 
+const arrayBlock=[]
+Object.values(newArrayLetters).map(item => { arrayBlock.push(item)})
+//console.warn('arrayBlock',arrayBlock);
  let i=0;
- let j=i;
-let a;
-    const r=0;
-  while( i < numericKey.length){
-    let order= numericKey.indexOf(newNumericKey[j]);
+ let j=0;
+let a=0;
+  //  const r=0;
 
-      while(order <numericKey.length ){
-        let letter = letterTransform[newNumericKey[i]][r];
-        if(letter!==undefined && letter!=="" ){
-
-                         object[numericKey[order]].push(letter);
-                         letterTransform[newNumericKey[i]].splice(letterTransform[newNumericKey[i]].indexOf(letter),1);
-                        a=i;
-               }
-               else if(i+1 < numericKey.length && letter!=="") {
-                letter=letterTransform[newNumericKey[i+1]][r];
-                if(letter!==undefined&& letter!==""){
-                object[numericKey[order]].push(letter);      
-                letterTransform[newNumericKey[i+1]].splice(letterTransform[newNumericKey[i+1]].indexOf(letter),1);
-                a=i+1;
-                }
-               }
-
-               if( letterTransform[newNumericKey[a]].length===0 && order=== numericKey.length-1){
-                j=j+1;
-             }
-        order=order+1;
+  while (i < letterTransform.length ){
+    let order= numericKey.indexOf(newNumericKey[a]);
+   // console.warn('orden',order,'se llenara a partir del numero', newNumericKey[a]);
+    while(order < numericKey.length){
+      if( i < letterTransform.length ){
+        if( arrayBlock[j].length>0){
+       //   console.warn('entro if');
+       //   console.warn('letter',arrayBlock[j][0],'numero',i,'fila numero',numericKey[order]);
+          object[numericKey[order]].push(arrayBlock[j][0]);
+          arrayBlock[j].shift();
+          i=i+1;
+        }
+        else if(j+1 < numericKey.length && arrayBlock[j+1].length>0 ){
+          j=j+1;
+         // console.warn('entro else if');
+        //  console.warn('letter',arrayBlock[j][0],'numero',i,'fila numero',numericKey[order]);
+          object[numericKey[order]].push(arrayBlock[j][0]);
+          arrayBlock[j].shift();
+          i=i+1;
+        }
+        else{
+         // console.warn('entro else', 'numero',i);
+          j=j+1;
+          i=i+1;
+        }
+        if( arrayBlock[j].length===0 &&  j+1 < numericKey.length  && order=== numericKey.length-1 ){
+       //   console.warn('entro a cambio de a' )
+          j=j+1;
+          a=a+1;
+        }
       }
 
-        i=letterTransform[newNumericKey[i]].length===0?i+1:i;
-  
-  }
-return Object.values(object).join().split(',')
+      order=order+1;
+    }
+  } 
+
+ // console.warn('resultado',object)
+return Object.values(object).join().split(',').filter(word => word !== '');
+//return [];
 }
 
 // method using secret Word
 newArrayLetters(arrayFinalCrypto, secretWord){
-
+  const longitudArray=arrayFinalCrypto.length;
   const secretArray= [];
   let indicator=0;
   let indicatorNumber=0;
@@ -530,7 +526,7 @@ newArrayLetters(arrayFinalCrypto, secretWord){
       arrayFinalCrypto.splice(arrayFinalCrypto.indexOf(item),1);
   }})
 
-  const repetition= 54%secretArray.length >0? Math.trunc(54/secretArray.length )+1:Math.trunc(54/secretArray.length ) ;
+  const repetition= longitudArray%secretArray.length >0? Math.trunc(longitudArray/secretArray.length )+1:Math.trunc(longitudArray/secretArray.length ) ;
   let t=0;
   const arraytemporal=[];
 
@@ -753,9 +749,7 @@ decreaseNumber(colum, number){
 
   }
 }
-findRestNumber(){
 
-}
 incrementNumber(colum, number){
   if(colum !==3 ){
     if(number<24){
@@ -775,8 +769,9 @@ incrementNumber(colum, number){
 
 render() {
     // ...
- const {textsee, activeText, number1, number2, number3,orderType,aplicationType,activeEncode, textEncript, arrayCriptoActual } = this.state;
-    return (
+ const {textsee, activatenumberafter,activeText, number1, number2, number3,orderType,aplicationType,activeEncode, textEncript, arrayCriptoActual } = this.state;
+  console.warn(activatenumberafter);  
+ return (
      <ScrollView style={style.container}>
        <Image 
        style={style.Image}
@@ -826,6 +821,13 @@ render() {
                             this.textInput = input;
                         }}
                         returnKeyType="go" />  
+        <View style={{flexDirection:'row',marginTop:30, justifyContent:'center', alignContent:'center'}}>
+        <Text style={{width:'75%', textAlignVertical:'center' }}>Activar opción para reordenar el abecedario a partir de una letra</Text>   
+        <Switch 
+        onValueChange={ (value) => this.setState({ activatestartletter: value })} 
+        value={ this.state.activatestartletter } 
+        /> 
+        </View>                  
         <Text style={{alignSelf:'center', marginTop:30}}>Una vez aplicados los métodos escriba la letra con la que empezará el nuevo abecedario</Text>              
         <TextInput       placeholder="Escriba la letra"
                         value={this.state.letterStart}
@@ -835,9 +837,15 @@ render() {
                         ref={input => {
                             this.textInput = input;
                         }}
-                        returnKeyType="go" />                  
-        <Text style={{alignSelf:'center', marginTop:30}}>Método de clave secreta</Text>              
-        <TextInput       placeholder="Escriba la palabra secreta (opcional)"
+                        returnKeyType="go" />   
+        <View style={{flexDirection:'row',marginTop:30, justifyContent:'center', alignContent:'center'}}>
+        <Text style={{textAlignVertical:'center', height:'75%' }}>Método de clave secreta</Text>   
+        <Switch 
+        onValueChange={ (value) => this.setState({ activatesecretword: value })} 
+        value={ this.state.activatesecretword } 
+        /> 
+        </View>                               
+        <TextInput       placeholder="Escriba la palabra secreta "
                         value={this.state.secretWord}
                         onChangeText={secretWord =>
                             this.setState({ secretWord})
@@ -846,7 +854,13 @@ render() {
                             this.textInput = input;
                         }}
                         returnKeyType="go" /> 
-        <Text style={{alignSelf:'center', marginTop:30}}>Elija una opción</Text>   
+        <View style={{flexDirection:'row',marginTop:30, justifyContent:'center', alignContent:'center'}}>
+        <Text style={{textAlignVertical:'center', height:'75%' }}>Mètodo de doble aplicación</Text>   
+        <Switch 
+        onValueChange={ (value) => this.setState({ activatedoubleaplication: value })} 
+        value={ this.state.activatedoubleaplication } 
+        /> 
+        </View>
         <Picker
           selectedValue={this.state.aplicationType}
           style={{ height: 50, width: 240, alignSelf:'center' }}
@@ -872,6 +886,13 @@ render() {
             <Picker.Item label="descendente" value="desc" />
             <Picker.Item label="ascendente" value="asc" />
           </Picker>               
+        </View>
+        <View style={{flexDirection:'row', height:60, justifyContent:'center', alignContent:'center'}}>
+        <Text style={{width:'75%', textAlignVertical:'center'}}>Activar la opción de agregar nùmeros desdpués de una letra</Text>
+        <Switch 
+        onValueChange={ (value) => this.setState({ activatenumberafter: value })} 
+        value={ this.state.activatenumberafter } 
+        /> 
         </View>
         <TextInput       placeholder="¿Apartir de qué letra se agregarán los números? "
                         value={this.state.letterNumber}
