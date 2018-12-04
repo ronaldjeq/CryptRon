@@ -90,6 +90,7 @@ export default class App extends Component{
   sustiTextOr:'i,d,d',
   numberAplication:'5,2,6,3',
   activeEncode:false,
+  activatesecretword:false,
   abcalterated:[],
   numberList:[0,1,2,3,4,5,6,7,8,9],
   Initialabc: [ 'a', 'b', 'c', 'd', 'e', 'f', 'g','h', 'i', 'j', 'k', 'l', 'm', 'n', 'ñ','o','p','q' ,'r',
@@ -304,9 +305,9 @@ transp(grupo3,narray){
 }
 
 addNumbers(listLetters1,listLetters2,listLetters3){
-  const {secretWord, letterStart, aplicationType, numberList,letterNumber} = this.state;
+  const {secretWord,activatenumberafter, letterStart, aplicationType, numberList,letterNumber,activatesecretword,activatedoubleaplication} = this.state;
   const arrayFinalCrypto=[];
-
+  let aplicationLetter;
   listLetters1.map((items, key) => {
     arrayFinalCrypto.push(items);
   })
@@ -322,18 +323,25 @@ addNumbers(listLetters1,listLetters2,listLetters3){
   //function for changue wletters with secretWord
 
 
-const letterTransform = secretWord !== ''? this.newArrayLetters(arrayFinalCrypto, secretWord):arrayFinalCrypto;
-const aplicationLetter = aplicationType ==='normal'? this.aplicationDouble(letterTransform):this.aplicationDoubleGradual(letterTransform);
+const letterTransform = secretWord !== '' && activatesecretword? this.newArrayLetters(arrayFinalCrypto, secretWord):arrayFinalCrypto;
+
+if(activatedoubleaplication){
+  aplicationLetter = aplicationType ==='normal'? this.aplicationDouble(letterTransform):this.aplicationDoubleGradual(letterTransform);
+}
+else{
+  aplicationLetter=letterTransform;
+}
 
 
-  const orderLetter = aplicationLetter.indexOf(letterNumber);
-
+  const orderLetter = activatenumberafter? aplicationLetter.indexOf(letterNumber):aplicationLetter.length -1;
+  console.warn(orderLetter);
   // added numbers after letter 
   numberList.map( (item, key)=> {
     aplicationLetter.splice(orderLetter + key + 1 , 0, item );
   })
 
-  
+  console.warn(aplicationLetter);
+
 
 
   return aplicationLetter;
@@ -552,8 +560,10 @@ newArrayLetters(arrayFinalCrypto, secretWord){
     }
 
     //arraytemporal[repetition-1].filter(Boolean);
+ // console.warn(arraytemporal)
   const newListLetters = this.orderLetter(arraytemporal);
   //console.warn('?',newListLetters);
+ // console.warn(newListLetters)
   return newListLetters;
 
 
@@ -769,8 +779,8 @@ incrementNumber(colum, number){
 
 render() {
     // ...
- const {textsee, activatenumberafter,activeText, number1, number2, number3,orderType,aplicationType,activeEncode, textEncript, arrayCriptoActual } = this.state;
-  console.warn(activatenumberafter);  
+ const {textsee,activatesecretword,activatedoubleaplication, activatenumberafter,activeText, number1, number2, number3,orderType,aplicationType,activeEncode, textEncript, arrayCriptoActual } = this.state;
+ // console.warn(activatenumberafter);  
  return (
      <ScrollView style={style.container}>
        <Image 
@@ -821,7 +831,7 @@ render() {
                             this.textInput = input;
                         }}
                         returnKeyType="go" />  
-        <View style={{flexDirection:'row',marginTop:30, justifyContent:'center', alignContent:'center'}}>
+        {/* <View style={{flexDirection:'row',marginTop:30, justifyContent:'center', alignContent:'center'}}>
         <Text style={{width:'75%', textAlignVertical:'center' }}>Activar opción para reordenar el abecedario a partir de una letra</Text>   
         <Switch 
         onValueChange={ (value) => this.setState({ activatestartletter: value })} 
@@ -837,15 +847,16 @@ render() {
                         ref={input => {
                             this.textInput = input;
                         }}
-                        returnKeyType="go" />   
+                        returnKeyType="go" />    */}
         <View style={{flexDirection:'row',marginTop:30, justifyContent:'center', alignContent:'center'}}>
         <Text style={{textAlignVertical:'center', height:'75%' }}>Método de clave secreta</Text>   
         <Switch 
         onValueChange={ (value) => this.setState({ activatesecretword: value })} 
         value={ this.state.activatesecretword } 
         /> 
-        </View>                               
-        <TextInput       placeholder="Escriba la palabra secreta "
+        </View>     
+        {activatesecretword &&
+          <TextInput       placeholder="Escriba la palabra secreta "
                         value={this.state.secretWord}
                         onChangeText={secretWord =>
                             this.setState({ secretWord})
@@ -854,6 +865,8 @@ render() {
                             this.textInput = input;
                         }}
                         returnKeyType="go" /> 
+        }                          
+        
         <View style={{flexDirection:'row',marginTop:30, justifyContent:'center', alignContent:'center'}}>
         <Text style={{textAlignVertical:'center', height:'75%' }}>Mètodo de doble aplicación</Text>   
         <Switch 
@@ -861,7 +874,9 @@ render() {
         value={ this.state.activatedoubleaplication } 
         /> 
         </View>
-        <Picker
+        {activatedoubleaplication &&
+        <View>
+ <Picker
           selectedValue={this.state.aplicationType}
           style={{ height: 50, width: 240, alignSelf:'center' }}
           onValueChange={(itemValue, itemIndex) => this.setState({aplicationType: itemValue})}>
@@ -887,14 +902,19 @@ render() {
             <Picker.Item label="ascendente" value="asc" />
           </Picker>               
         </View>
+        </View>
+         
+        }
+        
         <View style={{flexDirection:'row', height:60, justifyContent:'center', alignContent:'center'}}>
-        <Text style={{width:'75%', textAlignVertical:'center'}}>Activar la opción de agregar nùmeros desdpués de una letra</Text>
+        <Text style={{width:'75%', textAlignVertical:'center'}}>Activar la opción de agregar nùmeros después de una letra</Text>
         <Switch 
         onValueChange={ (value) => this.setState({ activatenumberafter: value })} 
         value={ this.state.activatenumberafter } 
         /> 
         </View>
-        <TextInput       placeholder="¿Apartir de qué letra se agregarán los números? "
+        {activatenumberafter &&
+          <TextInput       placeholder="¿Apartir de qué letra se agregarán los números? "
                         value={this.state.letterNumber}
                         onChangeText={letterNumber =>
                             this.setState({ letterNumber})
@@ -902,7 +922,9 @@ render() {
                         ref={input => {
                             this.textInput = input;
                         }}
-                        returnKeyType="go" />                           
+                        returnKeyType="go" />     
+        }
+                              
         <TouchableOpacity style={style.button} onPress={() => 
           this.setState({
             activeEncode: true
