@@ -8,6 +8,7 @@ import React, { Component } from 'react';
 import { Dimensions, Switch , Text, View, TouchableOpacity, TextInput, Image,ScrollView, Picker } from 'react-native';
 import AppButton from './aplication/Components/AppButton';
 //import AppButton from './aplication/Components/AppButton';
+const encriptList={};
 
 const style = {
   container:{
@@ -67,19 +68,27 @@ const style = {
 }
 export default class App extends Component{
 
-
   componentWillMount() {
- this.setState({ 
-  searchtext:'',
+    this.setState({
+      textsee:'',
+      number1:18,
+      number2:18,
+      number3:18,
+
+    })
+
+  }
+
+
+componentDidMount(){
+  this.setState({ 
+    Textenc:'hsdasdsa',
+      searchtext:'',
   secretWord:'',
   textEncript:'',
   textInitial:'',
-  textsee:'',
   activeText:false,
   arrayCriptoActual:[],
-  number1:18,
-  number2:18,
-  number3:18,
   changue:false,
   sustiText:'1,4,5',
   transpoText:'3,5,6',
@@ -92,18 +101,17 @@ export default class App extends Component{
   activeEncode:false,
   activatesecretword:false,
   abcalterated:[],
+  keyObject:'',
   numberList:[0,1,2,3,4,5,6,7,8,9],
+  numberList2:[0,1,2,3,4,5,6,7,8,9],
   Initialabc: [ 'a', 'b', 'c', 'd', 'e', 'f', 'g','h', 'i', 'j', 'k', 'l', 'm', 'n', 'ñ','o','p','q' ,'r',
+  's','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','Ñ','O','P','Q','R','S','T','U',
+  'V','W','X','Y','Z', '0', '1','2','3','4','5','6','7','8','9'],
+  Initialabc2: [ 'a', 'b', 'c', 'd', 'e', 'f', 'g','h', 'i', 'j', 'k', 'l', 'm', 'n', 'ñ','o','p','q' ,'r',
   's','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','Ñ','O','P','Q','R','S','T','U',
   'V','W','X','Y','Z', '0', '1','2','3','4','5','6','7','8','9']
       })
-  }
-
-
-componentDidMount(){
-  this.setState({ 
-    Textenc:'hsdasdsa',
-        })
+       
 }
   
 componentDidUpdate( prevState ) {
@@ -115,38 +123,58 @@ componentDidUpdate( prevState ) {
   }
 }
 shuffleArray() {
-  const {Initialabc, numberList}= this.state;
-  const le =[ 'a', 'b', 'c', 'd', 'e', 'f', 'g','h', 'i', 'j', 'k', 'l', 'm', 'n', 'ñ','o','p','q' ,'r',
-  's','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','Ñ','O','P','Q','R','S','T','U',
-  'V','W','X','Y','Z'];
-  const intitial= Initialabc;
-  const numbers= numberList;
-  for (let i = le.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [le[i], le[j]] = [le[j], le[i]];
+  const {Initialabc, Initialabc2,numberList,activeEncode,keyObject,numberList2}= this.state;
+  if (activeEncode){
+    const le =[ 'a', 'b', 'c', 'd', 'e', 'f', 'g','h', 'i', 'j', 'k', 'l', 'm', 'n', 'ñ','o','p','q' ,'r',
+    's','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','Ñ','O','P','Q','R','S','T','U',
+    'V','W','X','Y','Z'];
+    const intitial= Initialabc2;
+    const numbers= numberList2;
+    for (let i = le.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [le[i], le[j]] = [le[j], le[i]];
+    }
+  
+    for (let f = intitial.length - 1; f > 0; f--) {
+      const g = Math.floor(Math.random() * (f + 1));
+      [intitial[f], intitial[g]] = [intitial[g], intitial[f]];
   }
+  for (let l = numbers.length - 1; l > 0; l--) {
+    const m = Math.floor(Math.random() * (l + 1));
+    [numbers[l], numbers[m]] = [numbers[m], numbers[l]];
+  }
+    const indice = (new Date().getTime()).toString();
+    console.log(typeof(indice))
+    encriptList[indice]={};
+    encriptList[indice]['abcalterated']=le;
+    encriptList[indice]['Initialabc']=intitial;
+    encriptList[indice]['numberList']=numbers;
 
-  for (let i = intitial.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [intitial[i], intitial[j]] = [intitial[j], intitial[i]];
-}
-for (let i = numbers.length - 1; i > 0; i--) {
-  const j = Math.floor(Math.random() * (i + 1));
-  [numbers[i], numbers[j]] = [numbers[j], numbers[i]];
-}
+    console.log('IF');
+    console.warn('le',abcalterated)
+    console.warn('numberList',numbers)
+    console.warn('Initialabc',intitial)
 
-
-  this.setState({abcalterated:le, Initialabc:intitial, numberList:numbers});
-  return le;
+    this.setState({abcalterated:le, Initialabc:intitial, numberList:numbers,keyObject:indice});
+    return le;
+  }
+  else{
+    console.log('else');
+    console.log('keyObject',keyObject);
+    console.log('encriptList',encriptList);
+    console.log('encriptList[keyObject]',encriptList.keyObject);
+    this.setState({abcalterated:encriptList[keyObject]['abcalterated'], Initialabc:encriptList[keyObject]['Initialabc'], numberList:encriptList[keyObject]['numberList'],keyObject:keyObject});
+    return encriptList[keyObject]['abcalterated'];
+  }
 }
 encript(){
   const grupo1 = [];
   const grupo2 = [];
   const grupo3 = [];
 
-const {number1, number2, number3, sustiText, transpoText, sustiTextOr,activeEncode,abcalterated}= this.state;
-const letras= activeEncode?this.shuffleArray():abcalterated;
-const abcInitial= this.state.Initialabc;
+const letras= this.shuffleArray();
+const {number1, number2, number3, sustiText, transpoText, sustiTextOr,activeEncode,abcalterated,Initialabc,numberList,keyObject}= this.state;
+const abcInitial= Initialabc;
 
 //Asing letters into arraysgroups
 letras.map( (item, key) => {
@@ -176,6 +204,12 @@ letras.map( (item, key) => {
  // console.warn('addNumbers longitud',criptoArray.length);
 
  const encodeDinamic= this.encode(criptoArray, abcInitial);
+
+ console.log('VEAMOS');
+ console.log('keyObject',keyObject);
+ console.log('encriptList',encriptList);
+ console.log('encriptList[keyObject]',encriptList[keyObject]);
+
  return encodeDinamic;
 }
 
@@ -779,7 +813,10 @@ incrementNumber(colum, number){
 
 render() {
     // ...
- const {textsee,activatesecretword,activatedoubleaplication, activatenumberafter,activeText, number1, number2, number3,orderType,aplicationType,activeEncode, textEncript, arrayCriptoActual } = this.state;
+ const {textsee,activatesecretword,activatedoubleaplication, activatenumberafter,activeText, number1, number2, number3,keyObject } = this.state;
+//  console.warn(keyObject);
+//  console.warn(encriptList);
+
  // console.warn(activatenumberafter);  
  return (
      <ScrollView style={style.container}>
@@ -944,12 +981,21 @@ render() {
       } >
          <Text style={style.textButton} >Desciffrar</Text>
        </TouchableOpacity>
+       <TextInput       placeholder="Escriba el key para descifrar"
+                        value={this.state.keyObject}
+                        onChangeText={keyObject =>
+                            this.setState({ keyObject})
+                        }
+                        ref={input => {
+                            this.textInput = input;
+                        }}
+                        returnKeyType="go" /> 
        {
          activeText&&
         <Text selectable style={style.textencript}>{textsee}</Text>
 
        }
-
+       
 
 
      </ScrollView>
