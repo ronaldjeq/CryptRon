@@ -127,30 +127,16 @@ shuffleArray(valueKey) {
   let le =[ 'a', 'b', 'c', 'd', 'e', 'f', 'g','h', 'i', 'j', 'k', 'l', 'm', 'n', 'ñ','o','p','q' ,'r',
   's','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','Ñ','O','P','Q','R','S','T','U',
   'V','W','X','Y','Z'];
-/*   const intitial= Initialabc;
-  const numbers= numberList; */
+
   const valorKey = (new Date().getTime()).toString();
   for (let i = le.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [le[i], le[j]] = [le[j], le[i]];
   }
 
-/*   for (let i = intitial.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [intitial[i], intitial[j]] = [intitial[j], intitial[i]];
-} */
-/* for (let i = numbers.length - 1; i > 0; i--) {
-  const j = Math.floor(Math.random() * (i + 1));
-  [numbers[i], numbers[j]] = [numbers[j], numbers[i]];
-} */
   listcripto[valorKey]={};
   listcripto[valorKey]['abcalterated']=le;
-/*   listcripto[valorKey]['Initialabc']=intitial;
-  listcripto[valorKey]['numberList']=numbers; */
-  console.log('if')
-  console.log(valorKey);
-  console.log(le)
-  console.log(listcripto);
+
   this.setState({objectKey:valorKey});
   return le;
  }
@@ -267,9 +253,9 @@ substitution(item){
                         let count=1;
                         if(t>newitem.length){
                           while( t>newitem.length ){
-                            if(indice===0){
+                            if(indice!==0){
                             }
-                          t =  t- newitem.length; 
+                            t =  t- newitem.length; 
                           }
                           t=t-1;
                         }
@@ -293,7 +279,7 @@ invert(grupo2){
 transp(grupo3,narray){
 
 
-  //const narray= [ 7,4,1,9];
+ 
   const l = Math.floor(grupo3.length/narray.length);
   const resto= grupo3.length%narray.length;
   const letters = [];
@@ -306,9 +292,9 @@ transp(grupo3,narray){
       arrayLetters[item] = grupo3[key+t*narray.length];
     })
     
-    //console.warn('d',arrayLetters);
+  
     Object.keys(arrayLetters).map((items, key) => {
-    //  console.warn('¡',items);
+ 
       letters.push(arrayLetters[items]);
     })
     t=t+1;
@@ -323,9 +309,7 @@ transp(grupo3,narray){
   Object.keys(restarrayLetters).map((items, key) => {
     letters.push(restarrayLetters[items]);
   })
-  //console.warn(grupo3);
- // console.warn(letters, 'letters');
- //console.warn(letters);
+
   return letters;
 }
 
@@ -359,13 +343,11 @@ else{
 
 
   const orderLetter = activatenumberafter? aplicationLetter.indexOf(letterNumber):aplicationLetter.length -1;
-  console.warn(orderLetter);
   // added numbers after letter 
   numberList.map( (item, key)=> {
     aplicationLetter.splice(orderLetter + key + 1 , 0, item );
   })
 
-  console.warn(aplicationLetter);
 
 
 
@@ -424,13 +406,11 @@ aplicationDouble(letterTransform){
 }
 
 firstMethod(newNumericKey, letterTransform, numericKey){
- // console.warn('newNumericKey',newNumericKey,'numericKey',numericKey);
   let t=0;
   const object={};
   for( let i =0; i< numericKey.length; i++ ){
     object[newNumericKey[i]] = [];
  }
-//console.warn('object',object);
 
 while ( t < letterTransform.length){
   let indicatorNumber=0;
@@ -444,11 +424,7 @@ while ( t < letterTransform.length){
 
 }
 
-//console.warn('object2',object);
-//console.warn(Object.values(object).join().split(','))
-//return arraytemporal2.filter(Boolean);
-//const finalArray = this.transform(object);
-//console.warn(object)
+
 return Object.values(object).join().split(',');
 
 
@@ -486,45 +462,32 @@ thirdMethod(newNumericKey, newArrayLetters, numericKey,letterTransform){
   for( let i =0; i< numericKey.length; i++ ){
     object[numericKey[i]] = [];
  }
-// console.warn('object',object);
-// console.warn('newArrayLetters',newArrayLetters);
- //newNumericKey.sort((a, b) => a - b );
-
 const arrayBlock=[]
 Object.values(newArrayLetters).map(item => { arrayBlock.push(item)})
-//console.warn('arrayBlock',arrayBlock);
  let i=0;
  let j=0;
 let a=0;
-  //  const r=0;
-
   while (i < letterTransform.length ){
     let order= numericKey.indexOf(newNumericKey[a]);
-   // console.warn('orden',order,'se llenara a partir del numero', newNumericKey[a]);
     while(order < numericKey.length){
       if( i < letterTransform.length ){
         if( arrayBlock[j].length>0){
-       //   console.warn('entro if');
-       //   console.warn('letter',arrayBlock[j][0],'numero',i,'fila numero',numericKey[order]);
           object[numericKey[order]].push(arrayBlock[j][0]);
           arrayBlock[j].shift();
           i=i+1;
         }
         else if(j+1 < numericKey.length && arrayBlock[j+1].length>0 ){
           j=j+1;
-         // console.warn('entro else if');
-        //  console.warn('letter',arrayBlock[j][0],'numero',i,'fila numero',numericKey[order]);
+
           object[numericKey[order]].push(arrayBlock[j][0]);
           arrayBlock[j].shift();
           i=i+1;
         }
         else{
-         // console.warn('entro else', 'numero',i);
           j=j+1;
           i=i+1;
         }
         if( arrayBlock[j].length===0 &&  j+1 < numericKey.length  && order=== numericKey.length-1 ){
-       //   console.warn('entro a cambio de a' )
           j=j+1;
           a=a+1;
         }
@@ -534,9 +497,7 @@ let a=0;
     }
   } 
 
- // console.warn('resultado',object)
 return Object.values(object).join().split(',').filter(word => word !== '');
-//return [];
 }
 
 // method using secret Word
@@ -584,11 +545,8 @@ newArrayLetters(arrayFinalCrypto, secretWord){
       indicatorNumber=indicatorNumber+1;
     }
 
-    //arraytemporal[repetition-1].filter(Boolean);
- // console.warn(arraytemporal)
   const newListLetters = this.orderLetter(arraytemporal);
-  //console.warn('?',newListLetters);
- // console.warn(newListLetters)
+
   return newListLetters;
 
 

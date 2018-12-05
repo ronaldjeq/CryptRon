@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import { Button } from 'react-native-elements';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import {Dimensions, View, Text, TouchableOpacity} from 'react-native';
 const DEVICE_WIDTH = Dimensions.get( "window" ).width;
 
