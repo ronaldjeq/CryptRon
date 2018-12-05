@@ -8,7 +8,6 @@ import React, { Component } from 'react';
 import { Dimensions, Switch , Text, View, TouchableOpacity, TextInput, Image,ScrollView, Picker } from 'react-native';
 import AppButton from './aplication/Components/AppButton';
 //import AppButton from './aplication/Components/AppButton';
-const encriptList={};
 
 const style = {
   container:{
@@ -79,8 +78,12 @@ export default class App extends Component{
   secretWord:'',
   textEncript:'',
   textInitial:'',
+  textsee:'',
   activeText:false,
   arrayCriptoActual:[],
+  number1:18,
+  number2:18,
+  number3:18,
   changue:false,
   sustiText:'1,4,5',
   transpoText:'3,5,6',
@@ -93,13 +96,9 @@ export default class App extends Component{
   activeEncode:false,
   activatesecretword:false,
   abcalterated:[],
-  keyObject:'',
   numberList:[0,1,2,3,4,5,6,7,8,9],
   objectKey:'',
   Initialabc: [ 'a', 'b', 'c', 'd', 'e', 'f', 'g','h', 'i', 'j', 'k', 'l', 'm', 'n', 'ñ','o','p','q' ,'r',
-  's','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','Ñ','O','P','Q','R','S','T','U',
-  'V','W','X','Y','Z', '0', '1','2','3','4','5','6','7','8','9'],
-  Initialabc2: [ 'a', 'b', 'c', 'd', 'e', 'f', 'g','h', 'i', 'j', 'k', 'l', 'm', 'n', 'ñ','o','p','q' ,'r',
   's','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','Ñ','O','P','Q','R','S','T','U',
   'V','W','X','Y','Z', '0', '1','2','3','4','5','6','7','8','9']
     }
@@ -135,16 +134,6 @@ shuffleArray(valueKey) {
       const j = Math.floor(Math.random() * (i + 1));
       [le[i], le[j]] = [le[j], le[i]];
   }
-  for (let l = numbers.length - 1; l > 0; l--) {
-    const m = Math.floor(Math.random() * (l + 1));
-    [numbers[l], numbers[m]] = [numbers[m], numbers[l]];
-  }
-    const indice = (new Date().getTime()).toString();
-    console.log(typeof(indice))
-    encriptList[indice]={};
-    encriptList[indice]['abcalterated']=le;
-    encriptList[indice]['Initialabc']=intitial;
-    encriptList[indice]['numberList']=numbers;
 
 /*   for (let i = intitial.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -212,12 +201,6 @@ letras.map( (item, key) => {
  // console.warn('addNumbers longitud',criptoArray.length);
 
  const encodeDinamic= this.encode(criptoArray, abcInitial);
-
- console.log('VEAMOS');
- console.log('keyObject',keyObject);
- console.log('encriptList',encriptList);
- console.log('encriptList[keyObject]',encriptList[keyObject]);
-
  return encodeDinamic;
 }
 
@@ -995,21 +978,12 @@ render() {
       } >
          <Text style={style.textButton} >Desciffrar</Text>
        </TouchableOpacity>
-       <TextInput       placeholder="Escriba el key para descifrar"
-                        value={this.state.keyObject}
-                        onChangeText={keyObject =>
-                            this.setState({ keyObject})
-                        }
-                        ref={input => {
-                            this.textInput = input;
-                        }}
-                        returnKeyType="go" /> 
        {
          activeText&&
         <Text selectable style={style.textencript}>{textsee}</Text>
 
        }
-       
+
 
 
      </ScrollView>
